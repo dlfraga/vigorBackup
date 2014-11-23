@@ -35,8 +35,10 @@ public class Main {
 //		System.out.println(router.getEncodedUser());
 //		System.out.println(router.getEncodedPassword());
 		Router router = new Router();
+		router.setPassword("***REMOVED***");
+		router.setUsername("admin");
 		Address address = new Address();
-		address.setAddress(new URL("http://***REMOVED***:8181/weblogin.htm"));
+		address.setAddress(new URL("http://***REMOVED***:8181"));
 		ArrayList<Address> addList = new ArrayList<>();
 		addList.add(address);
 		router.setConnectionAddresses(addList);
