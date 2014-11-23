@@ -3,19 +3,14 @@ package vigorBackup.controller;
 
 
 import java.net.MalformedURLException;
-import java.util.List;
 
-import javax.persistence.EntityManager;
-import javax.persistence.EntityManagerFactory;
-import javax.persistence.Persistence;
-
-import vigorBackup.model.Router;
+import vigorBackup.model.Vigor2925;
 
 public class Main {
 
 	public static void main(String[] args) throws MalformedURLException {
-		EntityManagerFactory factory = Persistence.createEntityManagerFactory("vigorBackupDB");
-		EntityManager em = factory.createEntityManager();
+//		EntityManagerFactory factory = Persistence.createEntityManagerFactory("vigorBackupDB");
+//		EntityManager em = factory.createEntityManager();
 		
 //		Router router2 = new Router();
 //		router2.setDescription("teste");
@@ -28,12 +23,16 @@ public class Main {
 //		em.persist(router2);
 //		em.persist(addr);
 //		em.getTransaction().commit();
-		List<Router> routerList = f
+		//List<Router> routerList = f;
 		
 		
-		em.close();
-		factory.close();
-
+//		em.close();
+//		factory.close();
+		Vigor2925 router = new Vigor2925("admin", "***REMOVED***");
+		System.out.println(router.getEncodedUser());
+		System.out.println(router.getEncodedPassword());
+		
+		
 	}
 
 }
