@@ -1,10 +1,13 @@
 package vigorBackup.controller;
 
-
-
 import java.net.MalformedURLException;
+import java.net.URL;
+import java.util.ArrayList;
 
-import vigorBackup.model.Vigor2925;
+import vigorBackup.model.Address;
+import vigorBackup.model.DefaultRouterWebDownloader;
+import vigorBackup.model.Router;
+import vigorBackup.model.Vigor2910;
 
 public class Main {
 
@@ -28,10 +31,17 @@ public class Main {
 		
 //		em.close();
 //		factory.close();
-		Vigor2925 router = new Vigor2925("admin", "***REMOVED***");
-		System.out.println(router.getEncodedUser());
-		System.out.println(router.getEncodedPassword());
-		
+//		Vigor2925 router = new Vigor2925("admin", "***REMOVED***");
+//		System.out.println(router.getEncodedUser());
+//		System.out.println(router.getEncodedPassword());
+		Router router = new Router();
+		Address address = new Address();
+		address.setAddress(new URL("http://***REMOVED***:8181/weblogin.htm"));
+		ArrayList<Address> addList = new ArrayList<>();
+		addList.add(address);
+		router.setConnectionAddresses(addList);
+		Vigor2910 dltRouter = new Vigor2910(router);
+		dltRouter.downloadBackup();
 		
 	}
 
