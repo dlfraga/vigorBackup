@@ -1,10 +1,8 @@
 package vigorBackup.model;
 
-import java.io.BufferedInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.InputStream;
-import java.net.URL;
-import java.net.URLConnection;
 
 /**
  * Defines a Default Router Downloader that the specific routers should inherit
@@ -84,6 +82,21 @@ public class DefaultRouterWebDownloader {
 	 */
 	public void setDownloadedBackup(byte[] downloadedBackup) {
 		this.downloadedBackup = downloadedBackup;
+	}
+	
+	public void saveDataToFile(byte[] data){
+		String filename = "vigor.cfg";
+		FileOutputStream out;
+		try {
+			out = new FileOutputStream(filename);
+			out.write(data);
+			out.flush();
+			out.close();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
 	}
 
 }
