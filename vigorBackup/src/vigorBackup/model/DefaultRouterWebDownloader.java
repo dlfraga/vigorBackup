@@ -1,6 +1,5 @@
 package vigorBackup.model;
 
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 
@@ -25,30 +24,23 @@ public class DefaultRouterWebDownloader {
 	}
 
 	/**
-	 * Method to download the backup.
+	 * Download the router's backup using all available connection addresses,
+	 * sequentially
 	 * 
-	 * @return True if the download was successfull
-	 * @throws IOException
-	 */
-	protected boolean downloadBackupFromUrl(Address address) throws IOException {
-		return false;
-	}
-
-	/**
-	 * Download the router's backup using all available connection addresses
-	 * 
-	 * @return True if at least one of the links downloaded successfully
+	 * @return True if at least one of the links worked and the download was
+	 *         successful
 	 */
 	public boolean downloadBackup() {
 		boolean isBackupDone = false;
+		int backupTry = 0;
 		for (Address addr : router.getConnectionAddresses()) {
-			try {
-				// Only try new addresses if the last one didn't work
-				if(!isBackupDone){
-					isBackupDone = downloadBackupFromUrl(addr);	
-				}
-			} catch (IOException e) {
-				e.printStackTrace();
+			backupTry++;
+
+			// Only try new addresses if the last one didn't work
+			if (!isBackupDone) {
+				System.out.println(backupTry);
+				isBackupDone = downloadBackupFromUrl(addr);
+
 			}
 		}
 		return isBackupDone;
@@ -83,8 +75,14 @@ public class DefaultRouterWebDownloader {
 	public void setDownloadedBackup(byte[] downloadedBackup) {
 		this.downloadedBackup = downloadedBackup;
 	}
-	
-	public void saveDataToFile(byte[] data){
+
+	/**
+	 * Saves the downloaded data to a local file.
+	 * 
+	 * @param data
+	 *            The data to be saved. Usually it's the backup
+	 */
+	public void saveDataToFile(byte[] data) {
 		String filename = "vigor.cfg";
 		FileOutputStream out;
 		try {
@@ -96,7 +94,7 @@ public class DefaultRouterWebDownloader {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		
+
 	}
 
 }

@@ -5,9 +5,8 @@ import java.net.URL;
 import java.util.ArrayList;
 
 import vigorBackup.model.Address;
-import vigorBackup.model.DefaultRouterWebDownloader;
 import vigorBackup.model.Router;
-import vigorBackup.model.Vigor2910;
+import vigorBackup.model.Vigor2925;
 
 public class Main {
 
@@ -38,12 +37,19 @@ public class Main {
 		router.setPassword("***REMOVED***");
 		router.setUsername("admin");
 		Address address = new Address();
-		address.setAddress(new URL("http://***REMOVED***:8181"));
+		Address address2 = new Address();
+		Address address3 = new Address();
+		address.setAddress(new URL("http://agronomica.no-ip.info:8180"));
+		address2.setAddress(new URL("http://agronomica.no-ip.info:8181"));
+		address3.setAddress(new URL("http://agronomica.no-ip.info:8182"));
 		ArrayList<Address> addList = new ArrayList<>();
 		addList.add(address);
+		addList.add(address2);
+		addList.add(address3);
 		router.setConnectionAddresses(addList);
-		Vigor2910 dltRouter = new Vigor2910(router);
-		dltRouter.downloadBackup();
+		Vigor2925 dltRouter = new Vigor2925(router);
+		System.out.println(dltRouter.downloadBackup());
+		
 		
 	}
 

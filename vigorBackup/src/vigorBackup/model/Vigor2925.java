@@ -1,16 +1,14 @@
 package vigorBackup.model;
 
-import java.io.IOException;
-import java.net.CookieHandler;
-import java.net.CookieManager;
+import java.io.BufferedInputStream;
+import java.io.DataOutputStream;
+import java.io.InputStream;
+import java.net.HttpURLConnection;
 import java.net.URL;
-import java.util.List;
-
-import javax.net.ssl.HttpsURLConnection;
 
 public class Vigor2925 extends DefaultRouterWebDownloader {
-	private HttpsURLConnection conn;
-	private List<String> cookies;
+	private String cookie;
+	private HttpURLConnection connection;
 
 	public Vigor2925(Router router) {
 		super(router);
@@ -20,29 +18,93 @@ public class Vigor2925 extends DefaultRouterWebDownloader {
 	 * 
 	 */
 	@Override
-	protected boolean downloadBackupFromUrl(Address address) throws IOException {
-		String stringAdd = address.getAddress().toString();
-		// url used to authenticate
-		stringAdd += "/cgi-bin/wlogin.cgi";
+	public boolean downloadBackupFromUrl(Address address) {
+		boolean isDownloadOk = false;
+		try {
 
-		// turn on cookies
-		CookieHandler.setDefault(new CookieManager());
-		URL urlc = new URL(stringAdd);
-		conn = (HttpsURLConnection) urlc.openConnection();
-		conn.setUseCaches(false);
-		conn.setRequestMethod("POST");
-		conn.setRequestProperty("Host", address.getAddress().toString());
-		conn.setRequestProperty("Accept",
-				"text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8");
-		int responseCode = conn.getResponseCode();
-		setCookies(conn.getHeaderFields().get("Set-Cookie"));
-		return true;
+			String request = address.getAddress().toString();
+			// url used to authenticate
+			request += "/cgi-bin/wlogin.cgi";
+			String urlParameters = "aa="
+					+ getRouter().getBase64EncodedUsername()
+					+ "&ab="
+					+ getRouter().getBase64EncodedPassword();
+					//+ "&sslgroup=-1&obj3=&obj4=&obj5=&obj6=&obj7=";
+
+			URL url = new URL(request);
+			connection = (HttpURLConnection) url.openConnection();
+			connection.setDoOutput(true);
+			connection.setDoInput(true);
+			connection.setInstanceFollowRedirects(false);
+			connection.setRequestMethod("POST");
+			connection
+					.setRequestProperty("User-Agent",
+							"Mozilla/5.0 (Windows NT 6.1; WOW64; rv:16.0) Gecko/20100101 Firefox/16.0");
+			connection.setRequestProperty("Content-Type",
+					"application/x-www-form-urlencoded");
+			connection.setRequestProperty("charset", "utf-8");
+			connection.setRequestProperty("Content-Length",
+					"" + Integer.toString(urlParameters.getBytes().length));
+			connection.setUseCaches(false);
+
+			DataOutputStream wr = new DataOutputStream(
+					connection.getOutputStream());
+			wr.writeBytes(urlParameters);
+			wr.flush();
+			wr.close();
+			String cookie = connection.getHeaderFields().get("Set-Cookie")
+					.get(0);
+
+			connection.disconnect();
+
+			URL downloadUrl = new URL(address.getAddress().toString()
+					+ "/V2925_das.cfg");
+			connection = (HttpURLConnection) downloadUrl.openConnection();
+			connection.setRequestMethod("GET");
+			connection.setRequestProperty("Cookie", cookie);
+			connection
+					.setRequestProperty("User-Agent",
+							"Mozilla/5.0 (Windows NT 6.1; WOW64; rv:16.0) Gecko/20100101 Firefox/16.0");
+			//int responseCode = connection.getResponseCode();
+			//System.out.println(String.valueOf(responseCode));
+
+			int contentLength = connection.getContentLength();
+			//System.out.println(contentLength);
+			InputStream raw = connection.getInputStream();
+			InputStream in = new BufferedInputStream(raw);
+			byte[] data = new byte[contentLength];
+			int bytesRead = 0;
+			int offset = 0;
+			while (offset < contentLength) {
+				bytesRead = in.read(data, offset, data.length - offset);
+				if (bytesRead == -1)
+					break;
+				offset += bytesRead;
+			}
+			in.close();
+
+			if (offset != contentLength) {
+				isDownloadOk = false;
+			}
+			setDownloadedBackup(data);
+			saveDataToFile(getDownloadedBackup());
+
+			isDownloadOk = true;
+
+		} catch (Exception e) {
+			isDownloadOk = false;
+			
+		} 
+		
+		return isDownloadOk;
 
 	}
 
-	private void setCookies(List<String> list) {
-		this.cookies = cookies;
-
+	public String getCookies() {
+		return cookie;
 	}
 
+	public void setCookies(String cookies) {
+		this.cookie = cookies;
+	}
 }

@@ -1,6 +1,7 @@
 package vigorBackup.model;
 
 import java.util.ArrayList;
+import java.util.Base64;
 import java.util.Calendar;
 import java.util.List;
 
@@ -92,6 +93,21 @@ public class Router {
 	 */
 	public void setUsername(String username) {
 		this.username = username;
-	}	
+	}
+	
+	/**
+	 * Encodes the plain text username in base64
+	 * @return The encoded username
+	 */
+	public String getBase64EncodedUsername(){
+		return Base64.getEncoder().encodeToString(getUsername().getBytes());
+	}
+	/**
+	 * Encodes the plain text password in base64
+	 * @return the encoded password
+	 */
+	public String getBase64EncodedPassword(){
+		return Base64.getEncoder().encodeToString(getPassword().getBytes());
+	}
 	
 }
