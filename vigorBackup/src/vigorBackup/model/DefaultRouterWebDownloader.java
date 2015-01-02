@@ -24,29 +24,6 @@ public class DefaultRouterWebDownloader {
 	}
 
 	/**
-	 * Download the router's backup using all available connection addresses,
-	 * sequentially
-	 * 
-	 * @return True if at least one of the links worked and the download was
-	 *         successful
-	 */
-	public boolean downloadBackup() {
-		boolean isBackupDone = false;
-		int backupTry = 0;
-		for (Address addr : router.getConnectionAddresses()) {
-			backupTry++;
-
-			// Only try new addresses if the last one didn't work
-			if (!isBackupDone) {
-				System.out.println(backupTry);
-				isBackupDone = downloadBackupFromUrl(addr);
-
-			}
-		}
-		return isBackupDone;
-	}
-
-	/**
 	 * @return the router
 	 */
 	public Router getRouter() {

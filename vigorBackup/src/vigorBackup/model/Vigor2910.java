@@ -13,7 +13,7 @@ import java.util.Base64;
  * @author Daniel
  */
 
-public class Vigor2910 extends DefaultRouterWebDownloader {
+public class Vigor2910 extends DefaultRouterWebDownloader implements IRouterDownloader {
 
 	public Vigor2910(Router router) {
 		super(router);
@@ -66,6 +66,32 @@ public class Vigor2910 extends DefaultRouterWebDownloader {
 			return false;
 		}
 		
+	}
+
+
+
+	/**
+	 * Download the router's backup using all available connection addresses,
+	 * sequentially
+	 * 
+	 * @return True if at least one of the links worked and the download was
+	 *         successful
+	 */
+	@Override
+	public boolean downloadBackup() {
+		boolean isBackupDone = false;
+		int backupTry = 0;
+		for (Address addr : getRouter().getConnectionAddresses()) {
+			backupTry++;
+
+			// Only try new addresses if the last one didn't work
+			if (!isBackupDone) {
+				System.out.println(backupTry);
+				isBackupDone = downloadBackupFromUrl(addr);
+
+			}
+		}
+		return isBackupDone;
 	}
 
 }

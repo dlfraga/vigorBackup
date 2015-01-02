@@ -6,7 +6,7 @@ import java.io.InputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
 
-public class Vigor2925 extends DefaultRouterWebDownloader {
+public class Vigor2925 extends DefaultRouterWebDownloader implements IRouterDownloader {
 	private String cookie;
 	private HttpURLConnection connection;
 
@@ -106,5 +106,29 @@ public class Vigor2925 extends DefaultRouterWebDownloader {
 
 	public void setCookies(String cookies) {
 		this.cookie = cookies;
+	}
+
+	/**
+	 * Download the router's backup using all available connection addresses,
+	 * sequentially
+	 * 
+	 * @return True if at least one of the links worked and the download was
+	 *         successful
+	 */
+	@Override
+	public boolean downloadBackup() {
+		boolean isBackupDone = false;
+		int backupTry = 0;
+		for (Address addr : getRouter().getConnectionAddresses()) {
+			backupTry++;
+
+			// Only try new addresses if the last one didn't work
+			if (!isBackupDone) {
+				System.out.println(backupTry);
+				isBackupDone = downloadBackupFromUrl(addr);
+
+			}
+		}
+		return isBackupDone;
 	}
 }

@@ -4,7 +4,9 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
 
+import vigorBackup.factory.RouterDownloaderFactory;
 import vigorBackup.model.Address;
+import vigorBackup.model.IRouterDownloader;
 import vigorBackup.model.Router;
 import vigorBackup.model.Vigor2925;
 
@@ -34,11 +36,24 @@ public class Main {
 //		System.out.println(router.getEncodedUser());
 //		System.out.println(router.getEncodedPassword());
 		Router router = new Router();
+		Router router2 = new Router();
 		router.setPassword("***REMOVED***");
 		router.setUsername("admin");
+		
+		router2.setPassword("***REMOVED***");
+		router2.setUsername("admin");
+		
 		Address address = new Address();
 		Address address2 = new Address();
 		Address address3 = new Address();
+		
+		Address address4 = new Address();
+		address4.setAddress(new URL("http://mail.bioensaios.com.br:8181"));
+		ArrayList<Address> addList2 = new ArrayList<>();
+		addList2.add(address4);
+		router2.setConnectionAddresses(addList2);
+		
+		
 		address.setAddress(new URL("http://agronomica.no-ip.info:8180"));
 		address2.setAddress(new URL("http://agronomica.no-ip.info:8181"));
 		address3.setAddress(new URL("http://agronomica.no-ip.info:8182"));
@@ -47,8 +62,12 @@ public class Main {
 		addList.add(address2);
 		addList.add(address3);
 		router.setConnectionAddresses(addList);
-		Vigor2925 dltRouter = new Vigor2925(router);
-		System.out.println(dltRouter.downloadBackup());
+		RouterDownloaderFactory routerFactory = new RouterDownloaderFactory();
+		IRouterDownloader routerDownloader1 = routerFactory.getDownloader(routerFactory.VIGOR_2925, router);
+		IRouterDownloader routerDownloader2 = routerFactory.getDownloader(routerFactory.VIGOR_2910, router2);
+		
+		System.out.println(routerDownloader1.downloadBackup());
+		System.out.println(routerDownloader2.downloadBackup());
 		
 		
 	}
