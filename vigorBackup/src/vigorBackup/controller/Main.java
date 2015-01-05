@@ -6,9 +6,8 @@ import java.util.ArrayList;
 
 import vigorBackup.factory.RouterDownloaderFactory;
 import vigorBackup.model.Address;
-import vigorBackup.model.IRouterDownloader;
+import vigorBackup.model.DefaultRouterWebDownloader;
 import vigorBackup.model.Router;
-import vigorBackup.model.Vigor2925;
 
 public class Main {
 
@@ -63,8 +62,8 @@ public class Main {
 		addList.add(address3);
 		router.setConnectionAddresses(addList);
 		RouterDownloaderFactory routerFactory = new RouterDownloaderFactory();
-		IRouterDownloader routerDownloader1 = routerFactory.getDownloader(routerFactory.VIGOR_2925, router);
-		IRouterDownloader routerDownloader2 = routerFactory.getDownloader(routerFactory.VIGOR_2910, router2);
+		DefaultRouterWebDownloader routerDownloader1 = routerFactory.getDownloader(RouterDownloaderFactory.VIGOR_2925, router);
+		DefaultRouterWebDownloader routerDownloader2 = routerFactory.getDownloader(RouterDownloaderFactory.VIGOR_2910, router2);
 		
 		System.out.println(routerDownloader1.downloadBackup());
 		System.out.println(routerDownloader2.downloadBackup());

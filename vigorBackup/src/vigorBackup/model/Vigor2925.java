@@ -6,7 +6,7 @@ import java.io.InputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
 
-public class Vigor2925 extends DefaultRouterWebDownloader implements IRouterDownloader {
+public class Vigor2925 extends DefaultRouterWebDownloader {
 	private String cookie;
 	private HttpURLConnection connection;
 

@@ -1,7 +1,6 @@
 package vigorBackup.model;
 
 import java.io.BufferedInputStream;
-import java.io.IOException;
 import java.io.InputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
@@ -13,7 +12,7 @@ import java.util.Base64;
  * @author Daniel
  */
 
-public class Vigor2910 extends DefaultRouterWebDownloader implements IRouterDownloader {
+public class Vigor2910 extends DefaultRouterWebDownloader {
 
 	public Vigor2910(Router router) {
 		super(router);

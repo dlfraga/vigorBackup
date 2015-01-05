@@ -13,6 +13,17 @@ import java.io.IOException;
 public class DefaultRouterWebDownloader {
 	private Router router;
 	private byte[] downloadedBackup;
+	
+	
+	public boolean downloadBackup(){
+		return false;
+		
+	}
+	
+	public boolean downloadBackupFromUrl(Address address){
+		return false;
+		
+	}
 
 	/**
 	 * @author Daniel
