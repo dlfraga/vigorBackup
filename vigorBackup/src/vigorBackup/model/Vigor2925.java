@@ -108,13 +108,7 @@ public class Vigor2925 extends DefaultRouterWebDownloader {
 		this.cookie = cookies;
 	}
 
-	/**
-	 * Download the router's backup using all available connection addresses,
-	 * sequentially
-	 * 
-	 * @return True if at least one of the links worked and the download was
-	 *         successful
-	 */
+	
 	@Override
 	public boolean downloadBackup() {
 		boolean isBackupDone = false;

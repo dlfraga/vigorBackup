@@ -14,12 +14,23 @@ public class DefaultRouterWebDownloader {
 	private Router router;
 	private byte[] downloadedBackup;
 	
-	
+	/**
+	 * Download the router's backup using all available connection addresses,
+	 * sequentially
+	 * 
+	 * @return True if at least one of the links worked and the download was
+	 *         successful
+	 */
 	public boolean downloadBackup(){
 		return false;
 		
 	}
 	
+	/**
+	 * Downloads a file from a specific address.
+	 * @param address The address that will be used to download the file
+	 * @return True if the download was successful 
+	 */
 	public boolean downloadBackupFromUrl(Address address){
 		return false;
 		

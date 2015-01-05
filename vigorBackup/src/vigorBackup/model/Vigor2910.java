@@ -67,15 +67,6 @@ public class Vigor2910 extends DefaultRouterWebDownloader {
 		
 	}
 
-
-
-	/**
-	 * Download the router's backup using all available connection addresses,
-	 * sequentially
-	 * 
-	 * @return True if at least one of the links worked and the download was
-	 *         successful
-	 */
 	@Override
 	public boolean downloadBackup() {
 		boolean isBackupDone = false;
