@@ -1,11 +1,11 @@
 package vigorBackup.model;
-
 import java.net.URL;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.OneToOne;
+
 
 @Entity
 public class Address {
