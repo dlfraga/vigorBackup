@@ -1,5 +1,6 @@
 package vigorBackup.model;
 
+import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 
@@ -13,6 +14,7 @@ import java.io.IOException;
 public class DefaultRouterWebDownloader {
 	private Router router;
 	private byte[] downloadedBackup;
+	private String FILENAME_SUFFIX = "-backup.cfg";
 	
 	/**
 	 * Download the router's backup using all available connection addresses,
@@ -21,10 +23,22 @@ public class DefaultRouterWebDownloader {
 	 * @return True if at least one of the links worked and the download was
 	 *         successful
 	 */
-	public boolean downloadBackup(){
-		return false;
-		
+	public boolean downloadBackup() {
+		boolean isBackupDone = false;
+		int backupTry = 0;
+		for (Address addr : getRouter().getConnectionAddresses()) {
+			backupTry++;
+
+			// Only try new addresses if the last one didn't work
+			if (!isBackupDone) {
+				System.out.println(backupTry + " " + addr.getAddress().toString());
+				isBackupDone = downloadBackupFromUrl(addr);
+
+			}
+		}
+		return isBackupDone;
 	}
+
 	
 	/**
 	 * Downloads a file from a specific address.
@@ -82,7 +96,15 @@ public class DefaultRouterWebDownloader {
 	 *            The data to be saved. Usually it's the backup
 	 */
 	public void saveDataToFile(byte[] data) {
-		String filename = "vigor.cfg";
+		String directory = this.getRouter().getSiteName();
+		try {
+			new File(directory).mkdir();
+		} catch (Exception e) {
+			// TODO: Treat the could not create directory or security exception
+			e.printStackTrace();
+		}
+		
+		String filename = directory + "\\" + this.getRouter().getSiteName() + FILENAME_SUFFIX ;
 		FileOutputStream out;
 		try {
 			out = new FileOutputStream(filename);
@@ -90,7 +112,7 @@ public class DefaultRouterWebDownloader {
 			out.flush();
 			out.close();
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
+			// TODO Can't create file
 			e.printStackTrace();
 		}
 

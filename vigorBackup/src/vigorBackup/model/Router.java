@@ -1,6 +1,5 @@
 package vigorBackup.model;
 
-import java.util.ArrayList;
 import java.util.Base64;
 import java.util.Calendar;
 import java.util.List;
@@ -18,6 +17,7 @@ public class Router {
 	@GeneratedValue
 	private Long id;
 	private String description;
+	private String siteName;
 	private boolean isOk;
 	@Temporal(TemporalType.DATE)
 	private Calendar lastBackupDate;
@@ -25,6 +25,7 @@ public class Router {
 	private List<Address> connectionAddresses;
 	private String password;
 	private String username;
+	private int modelCode;
 	
 
 	public Router() {
@@ -63,8 +64,8 @@ public class Router {
 		return connectionAddresses;
 	}
 
-	public void setConnectionAddresses(ArrayList<Address> connectionAddresses) {
-		this.connectionAddresses = connectionAddresses;
+	public void setConnectionAddresses(List<Address> list) {
+		this.connectionAddresses = list;
 	}
 
 	/**
@@ -108,6 +109,28 @@ public class Router {
 	 */
 	public String getBase64EncodedPassword(){
 		return Base64.getEncoder().encodeToString(getPassword().getBytes());
+	}
+
+	public String getSiteName() {
+		return siteName;
+	}
+
+	public void setSiteName(String siteName) {
+		this.siteName = siteName;
+	}
+
+	public int getModelCode() {
+		return modelCode;
+	}
+
+	public void setModelCode(int modelCode) {
+		this.modelCode = modelCode;
+	}
+	
+	@Override
+	public String toString() {
+	return getModelCode() + getSiteName() + getUsername() + getPassword() + getConnectionAddresses().toString();
+		
 	}
 	
 }
