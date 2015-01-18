@@ -6,16 +6,23 @@ import java.io.InputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
 
+/**
+ * This class implements the backup routines specific to Vigor2925 routers.
+ * @see DefaultRouterWebDownloader
+ */
 public class Vigor2925 extends DefaultRouterWebDownloader {
 	private String cookie;
 	private HttpURLConnection connection;
 
-	public Vigor2925(Router router) {
+	public Vigor2925(final Router router) {
 		super(router);
 	}
 
 	/**
-	 * 
+	 * Downloads a backup file by authenticating to wlogin.cgi using a POST. The
+	 * user and password are first base64'ed and then sent. The retrieved cookie
+	 * contains the session information and will be used later to download the
+	 * file.
 	 */
 	@Override
 	public boolean downloadBackupFromUrl(Address address) {
@@ -26,10 +33,9 @@ public class Vigor2925 extends DefaultRouterWebDownloader {
 			// url used to authenticate
 			request += "/cgi-bin/wlogin.cgi";
 			String urlParameters = "aa="
-					+ getRouter().getBase64EncodedUsername()
-					+ "&ab="
+					+ getRouter().getBase64EncodedUsername() + "&ab="
 					+ getRouter().getBase64EncodedPassword();
-					//+ "&sslgroup=-1&obj3=&obj4=&obj5=&obj6=&obj7=";
+			// + "&sslgroup=-1&obj3=&obj4=&obj5=&obj6=&obj7=";
 
 			URL url = new URL(request);
 			connection = (HttpURLConnection) url.openConnection();
@@ -65,11 +71,8 @@ public class Vigor2925 extends DefaultRouterWebDownloader {
 			connection
 					.setRequestProperty("User-Agent",
 							"Mozilla/5.0 (Windows NT 6.1; WOW64; rv:16.0) Gecko/20100101 Firefox/16.0");
-			//int responseCode = connection.getResponseCode();
-			//System.out.println(String.valueOf(responseCode));
 
 			int contentLength = connection.getContentLength();
-			//System.out.println(contentLength);
 			InputStream raw = connection.getInputStream();
 			InputStream in = new BufferedInputStream(raw);
 			byte[] data = new byte[contentLength];
@@ -93,9 +96,9 @@ public class Vigor2925 extends DefaultRouterWebDownloader {
 
 		} catch (Exception e) {
 			isDownloadOk = false;
-			
-		} 
-		
+
+		}
+
 		return isDownloadOk;
 
 	}

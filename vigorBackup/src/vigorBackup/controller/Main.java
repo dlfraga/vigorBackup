@@ -6,7 +6,7 @@ import java.util.List;
 
 import vigorBackup.factory.RouterDownloaderFactory;
 import vigorBackup.model.DefaultRouterWebDownloader;
-import vigorBackup.model.ImportCSV;
+import vigorBackup.model.LoadFromCSV;
 import vigorBackup.model.Router;
 
 public class Main {
@@ -66,7 +66,7 @@ public class Main {
 		RouterDownloaderFactory routerFactory = new RouterDownloaderFactory();
 		List<DefaultRouterWebDownloader> routersDownloaders = new ArrayList<>();
 
-		ImportCSV importcsv = new ImportCSV();
+		LoadFromCSV importcsv = new LoadFromCSV();
 		List<Router> routerList = importcsv.loadCsv();
 		for (Router router : routerList) {
 			routersDownloaders.add(routerFactory.getDownloader(
