@@ -1,8 +1,15 @@
 package vigorBackup.controller;
 
-import java.net.MalformedURLException;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Properties;
+
+import org.joda.time.DateTime;
+import org.joda.time.Days;
 
 import vigorBackup.factory.RouterDownloaderFactory;
 import vigorBackup.model.DefaultRouterWebDownloader;
@@ -10,8 +17,27 @@ import vigorBackup.model.LoadFromCSV;
 import vigorBackup.model.Router;
 
 public class Main {
+	/**
+	 * Root directory to save downloaded files
+	 */
+	public static String ROOT_DIRECTORY;
+	private static Properties props;
 
-	public static void main(String[] args) throws MalformedURLException {
+	public static void main(String[] args) {
+		props = new Properties();
+		try {
+			props.load(new FileInputStream(new File(
+					"src/META-INF/configs.properties")));
+		} catch (FileNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		ROOT_DIRECTORY = props.getProperty("backup.directory");
+		cleanOldBackups();
+
 		// EntityManagerFactory factory =
 		// Persistence.createEntityManagerFactory("vigorBackupDB");
 		// EntityManager em = factory.createEntityManager();
@@ -31,50 +57,46 @@ public class Main {
 
 		// em.close();
 		// factory.close();
-		// Vigor2925 router = new Vigor2925("admin", "***REMOVED***");
-		// System.out.println(router.getEncodedUser());
-		// System.out.println(router.getEncodedPassword());
-		// Router router = new Router();
-		// Router router2 = new Router();
-		// router.setPassword("***REMOVED***");
-		// router.setUsername("admin");
-		// router.setSiteName("Agronomica");
-		//
-		// router2.setPassword("***REMOVED***");
-		// router2.setUsername("admin");
-		// router2.setSiteName("Bioensaios");
-		//
-		// Address address = new Address();
-		// Address address2 = new Address();
-		// Address address3 = new Address();
-		//
-		// Address address4 = new Address();
-		// address4.setAddress(new URL("http://mail.bioensaios.com.br:8181"));
-		// ArrayList<Address> addList2 = new ArrayList<>();
-		// addList2.add(address4);
-		// router2.setConnectionAddresses(addList2);
-		//
-		//
-		// address.setAddress(new URL("http://agronomica.no-ip.info:8180"));
-		// address2.setAddress(new URL("http://agronomica.no-ip.info:8181"));
-		// address3.setAddress(new URL("http://agronomica.no-ip.info:8182"));
-		// ArrayList<Address> addList = new ArrayList<>();
-		// addList.add(address);
-		// addList.add(address2);
-		// addList.add(address3);
-		// router.setConnectionAddresses(addList);
-		RouterDownloaderFactory routerFactory = new RouterDownloaderFactory();
-		List<DefaultRouterWebDownloader> routersDownloaders = new ArrayList<>();
 
-		LoadFromCSV importcsv = new LoadFromCSV();
-		List<Router> routerList = importcsv.loadCsv();
-		for (Router router : routerList) {
-			routersDownloaders.add(routerFactory.getDownloader(
-					router.getModelCode(), router));
-		}
+		 RouterDownloaderFactory routerFactory = new
+		 RouterDownloaderFactory();
+		 List<DefaultRouterWebDownloader> routersDownloaders = new
+		 ArrayList<>();
+		
+		 LoadFromCSV importcsv = new LoadFromCSV();
+		 List<Router> routerList = importcsv.loadCsv();
+		 for (Router router : routerList) {
+		 routersDownloaders.add(routerFactory.getDownloader(
+		 router.getModelCode(), router));
+		 }
+		
+		 for (DefaultRouterWebDownloader defaultRouterWebDownloader :
+		 routersDownloaders) {
+		 System.out.println(defaultRouterWebDownloader.downloadBackup());
+		 }
 
-		for (DefaultRouterWebDownloader defaultRouterWebDownloader : routersDownloaders) {
-			System.out.println(defaultRouterWebDownloader.downloadBackup());
+	}
+
+	private static void cleanOldBackups() {
+		try {
+			File dir = new File(ROOT_DIRECTORY);
+			File[] directories = dir.listFiles(File::isDirectory);
+			for (File file : directories) {
+				File[] backups = file.listFiles(File::isFile);
+				for (File backup : backups) {
+					DateTime start = new DateTime(DateTime.now());
+					DateTime end = new DateTime(backup.lastModified());
+					Days days = Days.daysBetween(end, start);
+					if (days.getDays() > Integer.parseInt(props
+							.getProperty("days.to.keep.backups"))) {
+						backup.delete();
+					}
+				}
+
+			}
+
+		} catch (Exception e) {
+			// TODO: handle exception
 		}
 
 	}

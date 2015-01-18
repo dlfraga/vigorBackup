@@ -3,13 +3,15 @@ package vigorBackup.model;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
+import vigorBackup.controller.Main;
 
 /**
  * Defines a Default Router Downloader that the specific routers should inherit
  * and methods that they can override as needed.
- * 
- * @author Daniel
- *
  */
 public class DefaultRouterWebDownloader {
 	/**
@@ -20,6 +22,12 @@ public class DefaultRouterWebDownloader {
 	 * The resulting file.
 	 */
 	private byte[] downloadedBackup;
+	/**
+	 * The current date to be used on the backup filename.
+	 */
+	DateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy");
+	Date date = new Date();
+	
 	/**
 	 * The backup file suffix.
 	 */
@@ -106,16 +114,16 @@ public class DefaultRouterWebDownloader {
 	 *            The data to be saved. Usually it's the backup
 	 */
 	public final void saveDataToFile(byte[] data) {
-		String directory = this.getRouter().getSiteName();
+		String directory = Main.ROOT_DIRECTORY + this.getRouter().getSiteName();
 		try {
-			new File(directory).mkdir();
+			new File(directory).mkdirs();
 		} catch (Exception e) {
 			// TODO: Treat the could not create directory or security exception
 			e.printStackTrace();
 		}
 
 		String filename = directory + "\\" + this.getRouter().getSiteName()
-				+ FILENAME_SUFFIX;
+				+ "-" + dateFormat.format(date) + FILENAME_SUFFIX;
 		FileOutputStream out;
 		try {
 			out = new FileOutputStream(filename);

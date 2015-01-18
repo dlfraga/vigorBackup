@@ -8,6 +8,9 @@ import java.net.URL;
 import java.util.Base64;
 
 public class Vigor3300 extends DefaultRouterWebDownloader {
+	// I don't know how to validate if the backup was really successful, so we
+	// use this minimum size to guess.
+	private int MIN_BACKUP_SIZE = 5072;
 
 	public Vigor3300(Router router) {
 		super(router);
@@ -42,12 +45,19 @@ public class Vigor3300 extends DefaultRouterWebDownloader {
 			ByteArrayOutputStream bio = new ByteArrayOutputStream();
 			int count;
 			byte buffer[] = new byte[1024];
+			// Vigor3300 has a problem: We can't obtain the backup's size ahead
+			// of time (via contentlength). We need to keep downloading until
+			// it's over (-1)
 			while ((count = in.read(buffer, 0, buffer.length)) != -1) {
 				bio.write(buffer, 0, count);
 			}
+
 			in.close();
 			setDownloadedBackup(bio.toByteArray());
 			saveDataToFile(getDownloadedBackup());
+			if (bio.size() < MIN_BACKUP_SIZE) {
+				return false;
+			}
 			return true;
 		} catch (Exception e) {
 			return false;
