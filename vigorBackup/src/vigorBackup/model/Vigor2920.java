@@ -6,19 +6,16 @@ import java.io.InputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
 
-/**
- * This class implements the backup routines specific to Vigor2925 routers.
- * @see DefaultRouterWebDownloader
- */
-public class Vigor2925 extends DefaultRouterWebDownloader {
+public class Vigor2920 extends DefaultRouterWebDownloader {
 	private String cookie;
 	private HttpURLConnection connection;
-	private final static String FILE_DOWNLOAD_STRING = "/V2925_temp.cfg";
+	private final static String FILE_DOWNLOAD_STRING = "/V2920_temp.cfg";
 
-	public Vigor2925(final Router router) {
+	public Vigor2920(Router router) {
 		super(router);
+		
 	}
-
+	
 	/**
 	 * Downloads a backup file by authenticating to wlogin.cgi using a POST. The
 	 * user and password are first base64'ed and then sent. The retrieved cookie

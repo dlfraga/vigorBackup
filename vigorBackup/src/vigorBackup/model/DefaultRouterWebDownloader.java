@@ -14,6 +14,7 @@ import vigorBackup.controller.Main;
  * and methods that they can override as needed.
  */
 public class DefaultRouterWebDownloader extends Thread{
+		
 	/**
 	 * The router that will have its firmware downloaded.
 	 */
@@ -43,18 +44,22 @@ public class DefaultRouterWebDownloader extends Thread{
 	public final boolean downloadBackup() {
 		boolean isBackupDone = false;
 		int backupTry = 0;
+		
+		
 		for (Address addr : getRouter().getConnectionAddresses()) {
 			backupTry++;
-
 			// Only try new addresses if the last one didn't work
 			if (!isBackupDone) {
-				System.out.println(backupTry + " "
-						+ addr.getAddress().toString());
+				//System.out.println(backupTry + " "
+					//	+ addr.getAddress().toString());
 				isBackupDone = downloadBackupFromUrl(addr);
-
 			}
 		}
-		if(isBackupDone)System.out.println("Done" + " " + getRouter().getSiteName());
+		if(isBackupDone){
+			System.out.println("Done" + " " + getRouter().getSiteName());
+		} else {
+			System.out.println("Failed" + " " + getRouter().getSiteName());
+		}
 		return isBackupDone;
 	}
 

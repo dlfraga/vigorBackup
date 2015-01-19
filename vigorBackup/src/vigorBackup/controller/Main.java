@@ -4,6 +4,8 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Properties;
@@ -58,47 +60,45 @@ public class Main {
 		// em.close();
 		// factory.close();
 
-		 RouterDownloaderFactory routerFactory = new
-		 RouterDownloaderFactory();
-		 List<DefaultRouterWebDownloader> routersDownloaders = new
-		 ArrayList<>();
-		
-		 LoadFromCSV importcsv = new LoadFromCSV();
-		 List<Router> routerList = importcsv.loadCsv();
-		 for (Router router : routerList) {
-		 routersDownloaders.add(routerFactory.getDownloader(
-		 router.getModelCode(), router));
-		 }
-		
-		 for (DefaultRouterWebDownloader defaultRouterWebDownloader :
-		 routersDownloaders) {
-		
-			 defaultRouterWebDownloader.start();
-			 
-		 }
+		RouterDownloaderFactory routerFactory = new RouterDownloaderFactory();
+		List<DefaultRouterWebDownloader> routersDownloaders = new ArrayList<>();
+
+		LoadFromCSV importcsv = new LoadFromCSV();
+		List<Router> routerList = importcsv.loadCsv();
+		for (Router router : routerList) {
+			routersDownloaders.add(routerFactory.getDownloader(
+					router.getModelCode(), router));
+		}
+
+		for (DefaultRouterWebDownloader defaultRouterWebDownloader : routersDownloaders) {
+			defaultRouterWebDownloader.start();
+
+		}
 
 	}
 
 	private static void cleanOldBackups() {
 		try {
 			File dir = new File(ROOT_DIRECTORY);
-			File[] directories = dir.listFiles(File::isDirectory);
-			for (File file : directories) {
-				File[] backups = file.listFiles(File::isFile);
-				for (File backup : backups) {
-					DateTime start = new DateTime(DateTime.now());
-					DateTime end = new DateTime(backup.lastModified());
-					Days days = Days.daysBetween(end, start);
-					if (days.getDays() > Integer.parseInt(props
-							.getProperty("days.to.keep.backups"))) {
-						backup.delete();
+			if (dir.exists()) {
+				File[] directories = dir.listFiles(File::isDirectory);
+				for (File file : directories) {
+					File[] backups = file.listFiles(File::isFile);
+					for (File backup : backups) {
+						DateTime start = new DateTime(DateTime.now());
+						DateTime end = new DateTime(backup.lastModified());
+						Days days = Days.daysBetween(end, start);
+						if (days.getDays() > Integer.parseInt(props
+								.getProperty("days.to.keep.backups"))) {
+							backup.delete();
+						}
 					}
 				}
 
 			}
 
 		} catch (Exception e) {
-			// TODO: handle exception
+			 e.printStackTrace();
 		}
 
 	}
