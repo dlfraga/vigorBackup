@@ -13,7 +13,7 @@ import vigorBackup.controller.Main;
  * Defines a Default Router Downloader that the specific routers should inherit
  * and methods that they can override as needed.
  */
-public class DefaultRouterWebDownloader {
+public class DefaultRouterWebDownloader extends Thread{
 	/**
 	 * The router that will have its firmware downloaded.
 	 */
@@ -54,6 +54,7 @@ public class DefaultRouterWebDownloader {
 
 			}
 		}
+		if(isBackupDone)System.out.println("Done" + " " + getRouter().getSiteName());
 		return isBackupDone;
 	}
 
@@ -135,6 +136,12 @@ public class DefaultRouterWebDownloader {
 			e.printStackTrace();
 		}
 
+	}
+
+	@Override
+	public void run() {
+		downloadBackup();
+		
 	}
 
 }

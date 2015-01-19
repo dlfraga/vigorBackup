@@ -72,7 +72,9 @@ public class Main {
 		
 		 for (DefaultRouterWebDownloader defaultRouterWebDownloader :
 		 routersDownloaders) {
-		 System.out.println(defaultRouterWebDownloader.downloadBackup());
+		
+			 defaultRouterWebDownloader.start();
+			 
 		 }
 
 	}
