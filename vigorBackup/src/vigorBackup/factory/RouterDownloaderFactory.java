@@ -12,22 +12,21 @@ public class RouterDownloaderFactory {
 	public static final int VIGOR_2910 = 1;
 	public static final int VIGOR_3300 = 2;
 	public static final int VIGOR_2920 = 3;
-	
-	
-	public DefaultRouterWebDownloader getDownloader(int routerIndex, Router router){			
-		if(routerIndex == VIGOR_2910){
+	public static final int VIGOR_3200 = 4;
+
+	public DefaultRouterWebDownloader getDownloader(int routerIndex,
+			Router router) {
+		if (routerIndex == VIGOR_2910)
 			return new Vigor2910(router);
-		}
-		if(routerIndex == VIGOR_2925){
+		if (routerIndex == VIGOR_2925)
 			return new Vigor2925(router);
-		}
-		if(routerIndex == VIGOR_3300){
+		if (routerIndex == VIGOR_3300)
 			return new Vigor3300(router);
-		}
-		if (routerIndex == VIGOR_2920) {
+		if (routerIndex == VIGOR_2920)
 			return new Vigor2920(router);
-		}
-		
+		if (routerIndex == VIGOR_3200)
+			return new Vigor3300(router);
+
 		return null;
 	}
 

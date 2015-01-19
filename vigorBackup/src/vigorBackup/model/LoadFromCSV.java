@@ -28,7 +28,8 @@ public class LoadFromCSV {
 	private static final int USERNAME_INDEX = 3;
 	private static final int PASSWORD_INDEX = 4;
 	private static final String[] CSV_COLUMN_NAMES = { "modelCode", "siteName",
-			"description", "userName", "passWord", "mainAddress", "secondaryAddress" };
+			"description", "userName", "passWord", "mainAddress",
+			"secondaryAddress" };
 	/**
 	 * The file can have one or more addresses. All columns after the main
 	 * address are treated as additional addresses that can be used to download
@@ -57,6 +58,8 @@ public class LoadFromCSV {
 				if (splittenLine[MODEL_CODE_INDEX]
 						.equalsIgnoreCase(CSV_COLUMN_NAMES[0])) {
 					continue;
+				} else if (splittenLine[MODEL_CODE_INDEX].equalsIgnoreCase("")) {
+					continue;
 				}
 				Router router = new Router();
 				router.setModelCode(Integer
@@ -75,8 +78,8 @@ public class LoadFromCSV {
 						addressList.add(address);
 					} catch (Exception e) {
 						// TODO: Log malformed address problem
+						e.printStackTrace();
 					}
-
 					index++;
 
 				} while (splittenLine.length > index);

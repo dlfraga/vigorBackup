@@ -43,11 +43,11 @@ public class DefaultRouterWebDownloader extends Thread{
 	 */
 	public final boolean downloadBackup() {
 		boolean isBackupDone = false;
-		int backupTry = 0;
+		//int backupTry = 0;
 		
 		
 		for (Address addr : getRouter().getConnectionAddresses()) {
-			backupTry++;
+			//backupTry++;
 			// Only try new addresses if the last one didn't work
 			if (!isBackupDone) {
 				//System.out.println(backupTry + " "
@@ -146,7 +146,6 @@ public class DefaultRouterWebDownloader extends Thread{
 	@Override
 	public void run() {
 		downloadBackup();
-		
 	}
 
 }
