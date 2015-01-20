@@ -7,10 +7,13 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.Base64;
 
+import javax.net.ssl.HttpsURLConnection;
+
 public class Vigor3300 extends DefaultRouterWebDownloader {
 	// I don't know how to validate if the backup was really successful, so we
 	// use this minimum size to guess.
 	private int MIN_BACKUP_SIZE = 5072;
+	private HttpURLConnection urc;
 
 	public Vigor3300(Router router) {
 		super(router);
@@ -22,8 +25,14 @@ public class Vigor3300 extends DefaultRouterWebDownloader {
 			String stringAdd = address.getAddress().toString();
 			stringAdd += "/cgi-bin/mainfunction.cgi?set=download_cli_configuration";
 			URL url = new URL(stringAdd);
+			
+			if(url.getProtocol().equals("http")){
+				urc = (HttpURLConnection) url.openConnection();	
+			} else {
+				urc = (HttpsURLConnection) url.openConnection();
+			}
 
-			HttpURLConnection urc = (HttpURLConnection) url.openConnection();
+			
 			if (getRouter().getUsername() != null
 					&& getRouter().getUsername().length() > 0
 					&& getRouter().getPassword() != null

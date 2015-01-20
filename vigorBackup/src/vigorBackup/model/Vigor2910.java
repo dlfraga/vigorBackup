@@ -24,8 +24,7 @@ public class Vigor2910 extends DefaultRouterWebDownloader {
 		try {
 			String stringAdd = address.getAddress().toString();
 			stringAdd += "/V2910_date.cfg";
-			URL url = new URL(stringAdd);
-
+			URL url = new URL(stringAdd);			
 			HttpURLConnection urc = (HttpURLConnection) url.openConnection();
 			if (getRouter().getUsername() != null
 					&& getRouter().getUsername().length() > 0

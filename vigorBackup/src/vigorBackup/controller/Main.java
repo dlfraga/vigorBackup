@@ -37,27 +37,6 @@ public class Main {
 		}
 		ROOT_DIRECTORY = props.getProperty("backup.directory");
 		cleanOldBackups();
-
-		// EntityManagerFactory factory =
-		// Persistence.createEntityManagerFactory("vigorBackupDB");
-		// EntityManager em = factory.createEntityManager();
-
-		// Router router2 = new Router();
-		// router2.setDescription("teste");
-		// router2.setOk(false);
-		//
-		// Address addr = new Address();
-		// addr.setAddress(new URL("http://intranet"));
-		// addr.setRouter(router2);
-		// em.getTransaction().begin();
-		// em.persist(router2);
-		// em.persist(addr);
-		// em.getTransaction().commit();
-		// List<Router> routerList = f;
-
-		// em.close();
-		// factory.close();
-
 		RouterDownloaderFactory routerFactory = new RouterDownloaderFactory();
 		List<DefaultRouterWebDownloader> routersDownloaders = new ArrayList<>();
 
@@ -96,8 +75,8 @@ public class Main {
 			}
 
 		} catch (Exception e) {
-			//TODO: Treat 
-			 e.printStackTrace();
+			// TODO: Treat
+			e.printStackTrace();
 		}
 
 	}
