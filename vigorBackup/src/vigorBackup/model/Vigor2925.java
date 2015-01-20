@@ -107,7 +107,7 @@ public class Vigor2925 extends DefaultRouterWebDownloader {
 
 		} catch (Exception e) {
 			isDownloadOk = false;
-			e.printStackTrace();
+			//e.printStackTrace();
 		}
 
 		return isDownloadOk;

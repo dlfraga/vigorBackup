@@ -31,8 +31,8 @@ public class Vigor3200 extends DefaultRouterWebDownloader{
 			request += "/cgi-bin/wlogin.cgi";
 			String urlParameters = "aa="
 					+ getRouter().getBase64EncodedUsername() + "&ab="
-					+ getRouter().getBase64EncodedPassword();
-			// + "&sslgroup=-1&obj3=&obj4=&obj5=&obj6=&obj7=";
+					+ getRouter().getBase64EncodedPassword()
+					+ "&sslgroup=-1&obj3=&obj4=&obj5=&obj6=&obj7=";
 
 			URL url = new URL(request);
 			connection = (HttpURLConnection) url.openConnection();
@@ -93,6 +93,7 @@ public class Vigor3200 extends DefaultRouterWebDownloader{
 
 		} catch (Exception e) {
 			isDownloadOk = false;
+			e.printStackTrace();
 
 		}
 

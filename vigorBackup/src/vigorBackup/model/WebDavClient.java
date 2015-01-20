@@ -12,10 +12,10 @@ import com.github.sardine.SardineFactory;
 public class WebDavClient {
 
 	public WebDavClient() {
-		Sardine sardine = SardineFactory.begin("", "");
+		Sardine sardine = SardineFactory.begin("webdav", "***REMOVED***");
 		
 		try {
-			List<DavResource> resources = sardine.list("hr");
+			List<DavResource> resources = sardine.list("http://intranet");
 			for (DavResource davResource : resources) {
 				System.out.println(davResource);
 			}
