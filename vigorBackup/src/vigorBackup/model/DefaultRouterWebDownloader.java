@@ -13,8 +13,8 @@ import vigorBackup.controller.Main;
  * Defines a Default Router Downloader that the specific routers should inherit
  * and methods that they can override as needed.
  */
-public class DefaultRouterWebDownloader extends Thread{
-		
+public class DefaultRouterWebDownloader extends Thread {
+
 	/**
 	 * The router that will have its firmware downloaded.
 	 */
@@ -28,7 +28,7 @@ public class DefaultRouterWebDownloader extends Thread{
 	 */
 	DateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy");
 	Date date = new Date();
-	
+
 	/**
 	 * The backup file suffix.
 	 */
@@ -43,19 +43,18 @@ public class DefaultRouterWebDownloader extends Thread{
 	 */
 	public final boolean downloadBackup() {
 		boolean isBackupDone = false;
-		//int backupTry = 0;
-		
-		
+		// int backupTry = 0;
+
 		for (Address addr : getRouter().getConnectionAddresses()) {
-			//backupTry++;
+			// backupTry++;
 			// Only try new addresses if the last one didn't work
 			if (!isBackupDone) {
-				//System.out.println(backupTry + " "
-					//	+ addr.getAddress().toString());
+				// System.out.println(backupTry + " "
+				// + addr.getAddress().toString());
 				isBackupDone = downloadBackupFromUrl(addr);
 			}
 		}
-		if(isBackupDone){
+		if (isBackupDone) {
 			System.out.println("Done" + " " + getRouter().getSiteName());
 		} else {
 			System.out.println("Failed" + " " + getRouter().getSiteName());
@@ -143,6 +142,12 @@ public class DefaultRouterWebDownloader extends Thread{
 
 	}
 
+	
+	
+	/**
+	 * Run method to support multithreaded downloads. It only executes the
+	 * backup process.
+	 */
 	@Override
 	public void run() {
 		downloadBackup();
