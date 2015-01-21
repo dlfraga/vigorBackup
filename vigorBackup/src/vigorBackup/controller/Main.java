@@ -1,20 +1,12 @@
 package vigorBackup.controller;
 
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Properties;
 
 import org.joda.time.DateTime;
 import org.joda.time.Days;
 
-import vigorBackup.factory.RouterDownloaderFactory;
-import vigorBackup.model.DefaultRouterWebDownloader;
-import vigorBackup.model.LoadFromCSV;
-import vigorBackup.model.Router;
+import vigorBackup.model.WebDavClient;
 
 public class Main {
 	/**
@@ -24,36 +16,36 @@ public class Main {
 	private static Properties props;
 
 	public static void main(String[] args) {
-		//WebDavClient webDavClient = new WebDavClient();
+		WebDavClient webDavClient = new WebDavClient();
 		
-		
-		props = new Properties();
-		try {
-			props.load(new FileInputStream(new File(
-					"src/META-INF/configs.properties")));
-		} catch (FileNotFoundException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		ROOT_DIRECTORY = props.getProperty("backup.directory");
-		cleanOldBackups();
-		RouterDownloaderFactory routerFactory = new RouterDownloaderFactory();
-		List<DefaultRouterWebDownloader> routersDownloaders = new ArrayList<>();
-
-		LoadFromCSV importcsv = new LoadFromCSV();
-		List<Router> routerList = importcsv.loadCsv();
-		for (Router router : routerList) {
-			routersDownloaders.add(routerFactory.getDownloader(
-					router.getModelCode(), router));
-		}
-
-		for (DefaultRouterWebDownloader defaultRouterWebDownloader : routersDownloaders) {
-			defaultRouterWebDownloader.start();
-
-		}
+//		
+//		props = new Properties();
+//		try {
+//			props.load(new FileInputStream(new File(
+//					"src/META-INF/configs.properties")));
+//		} catch (FileNotFoundException e) {
+//			// TODO Auto-generated catch block
+//			e.printStackTrace();
+//		} catch (IOException e) {
+//			// TODO Auto-generated catch block
+//			e.printStackTrace();
+//		}
+//		ROOT_DIRECTORY = props.getProperty("backup.directory");
+//		cleanOldBackups();
+//		RouterDownloaderFactory routerFactory = new RouterDownloaderFactory();
+//		List<DefaultRouterWebDownloader> routersDownloaders = new ArrayList<>();
+//
+//		LoadFromCSV importcsv = new LoadFromCSV();
+//		List<Router> routerList = importcsv.loadCsv();
+//		for (Router router : routerList) {
+//			routersDownloaders.add(routerFactory.getDownloader(
+//					router.getModelCode(), router));
+//		}
+//
+//		for (DefaultRouterWebDownloader defaultRouterWebDownloader : routersDownloaders) {
+//			defaultRouterWebDownloader.start();
+//
+//		}
 
 	}
 
