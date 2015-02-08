@@ -101,8 +101,6 @@ public class Vigor2925 extends DefaultRouterWebDownloader {
 				isDownloadOk = false;
 			}
 			setDownloadedBackup(data);
-			saveDataToFile(getDownloadedBackup());
-
 			isDownloadOk = true;
 
 		} catch (Exception e) {

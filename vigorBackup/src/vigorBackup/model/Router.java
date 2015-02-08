@@ -25,7 +25,7 @@ public class Router {
 	private List<Address> connectionAddresses;
 	private String password;
 	private String username;
-	private int modelCode;
+	private ERouterModels routerModel;
 	
 
 	public Router() {
@@ -111,26 +111,46 @@ public class Router {
 		return Base64.getEncoder().encodeToString(getPassword().getBytes());
 	}
 
+	/**
+	 * Gets the site name, to be used as a description of where the router is
+	 * @return The name of the site
+	 */
 	public String getSiteName() {
 		return siteName;
 	}
 
+	/**
+	 * Gets the site name, to be used as a description of where the router is
+	 * @param siteName The site name.
+	 */
 	public void setSiteName(String siteName) {
 		this.siteName = siteName;
 	}
 
-	public int getModelCode() {
-		return modelCode;
+	/**
+	 * Gets the router model.
+	 * @return The model.
+	 * @see ERouterModels
+	 */
+	public ERouterModels getRouterModel() {
+		return routerModel;
 	}
 
-	public void setModelCode(int modelCode) {
-		this.modelCode = modelCode;
+	/**
+	 * Sets the current router model.
+	 * @param routerModel The model.
+	 * @see ERouterModels
+	 */
+	public void setRouterModel(ERouterModels routerModel) {
+		this.routerModel = routerModel;
 	}
-	
+
 	@Override
 	public String toString() {
-	return getModelCode() + getSiteName() + getUsername() + getPassword() + getConnectionAddresses().toString();
+	return getRouterModel().name() + getSiteName() + getUsername() + getPassword() + getConnectionAddresses().toString();
 		
 	}
+
+
 	
 }

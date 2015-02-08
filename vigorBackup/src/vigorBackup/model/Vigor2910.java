@@ -58,7 +58,6 @@ public class Vigor2910 extends DefaultRouterWebDownloader {
 			}
 			
 			setDownloadedBackup(data);
-			saveDataToFile(getDownloadedBackup());
 			return true;
 		} catch (Exception e) {
 			return false;

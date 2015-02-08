@@ -10,9 +10,6 @@ import au.com.bytecode.opencsv.CSVReader;
 
 /**
  * Loads router data from a CSV file.
- * 
- * @author Daniel
- *
  */
 public class LoadFromCSV {
 	// TODO: Give the user an FileChooser to open whatever csv file he wants
@@ -62,8 +59,14 @@ public class LoadFromCSV {
 					continue;
 				}
 				Router router = new Router();
-				router.setModelCode(Integer
-						.parseInt(splittenLine[MODEL_CODE_INDEX]));
+				int modelCode = Integer.parseInt(splittenLine[MODEL_CODE_INDEX]);
+				//Skip lines with wrong model coded
+				if(modelCode < 0 || modelCode >= ERouterModels.values().length){
+					continue;
+				} else {
+					router.setRouterModel(ERouterModels.get(modelCode));
+				}
+				
 				router.setSiteName(splittenLine[SITE_NAME_INDEX]);
 				router.setDescription(splittenLine[DESCRIPTION_INDEX]);
 				router.setUsername(splittenLine[USERNAME_INDEX]);

@@ -87,14 +87,10 @@ public class Vigor3200 extends DefaultRouterWebDownloader{
 				isDownloadOk = false;
 			}
 			setDownloadedBackup(data);
-			saveDataToFile(getDownloadedBackup());
-
 			isDownloadOk = true;
 
 		} catch (Exception e) {
 			isDownloadOk = false;
-			e.printStackTrace();
-
 		}
 
 		return isDownloadOk;

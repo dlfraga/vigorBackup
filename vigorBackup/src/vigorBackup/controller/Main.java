@@ -1,12 +1,20 @@
 package vigorBackup.controller;
 
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Properties;
 
 import org.joda.time.DateTime;
 import org.joda.time.Days;
 
-import vigorBackup.model.WebDavClient;
+import vigorBackup.model.DefaultRouterWebDownloader;
+import vigorBackup.model.ERouterModels;
+import vigorBackup.model.LoadFromCSV;
+import vigorBackup.model.Router;
 
 public class Main {
 	/**
@@ -16,36 +24,39 @@ public class Main {
 	private static Properties props;
 
 	public static void main(String[] args) {
-		WebDavClient webDavClient = new WebDavClient();
+		if(args == null){
+			System.out.println("You need to specify a config file location \n "
+					+ "I'm going to create a default one now");
+		}
+		String configFile = args[0];
 		
-//		
-//		props = new Properties();
-//		try {
-//			props.load(new FileInputStream(new File(
-//					"src/META-INF/configs.properties")));
-//		} catch (FileNotFoundException e) {
-//			// TODO Auto-generated catch block
-//			e.printStackTrace();
-//		} catch (IOException e) {
-//			// TODO Auto-generated catch block
-//			e.printStackTrace();
-//		}
-//		ROOT_DIRECTORY = props.getProperty("backup.directory");
-//		cleanOldBackups();
-//		RouterDownloaderFactory routerFactory = new RouterDownloaderFactory();
-//		List<DefaultRouterWebDownloader> routersDownloaders = new ArrayList<>();
-//
-//		LoadFromCSV importcsv = new LoadFromCSV();
-//		List<Router> routerList = importcsv.loadCsv();
-//		for (Router router : routerList) {
-//			routersDownloaders.add(routerFactory.getDownloader(
-//					router.getModelCode(), router));
-//		}
-//
-//		for (DefaultRouterWebDownloader defaultRouterWebDownloader : routersDownloaders) {
-//			defaultRouterWebDownloader.start();
-//
-//		}
+		props = new Properties();
+		try {
+			props.load(new FileInputStream(new File(
+					configFile)));
+		} catch (FileNotFoundException e) {
+			// TODO Auto-generated catch block
+			System.out.println("The config file could not be found");
+			System.exit(1);
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			System.out.println("Can't read the file.");
+			System.exit(2);
+		}
+		ROOT_DIRECTORY = props.getProperty("backup.directory");
+		cleanOldBackups();
+		
+		List<DefaultRouterWebDownloader> routersDownloaders = new ArrayList<>();
+
+		LoadFromCSV importcsv = new LoadFromCSV();
+		List<Router> routerList = importcsv.loadCsv();
+		for (Router router : routerList) {
+			routersDownloaders.add(ERouterModels.returnDownloader(router));
+		}
+
+		for (DefaultRouterWebDownloader defaultRouterWebDownloader : routersDownloaders) {
+			defaultRouterWebDownloader.start();
+		}
 
 	}
 
@@ -66,7 +77,6 @@ public class Main {
 						}
 					}
 				}
-
 			}
 
 		} catch (Exception e) {

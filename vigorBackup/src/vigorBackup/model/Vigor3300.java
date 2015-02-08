@@ -62,8 +62,7 @@ public class Vigor3300 extends DefaultRouterWebDownloader {
 			}
 
 			in.close();
-			setDownloadedBackup(bio.toByteArray());
-			saveDataToFile(getDownloadedBackup());
+			setDownloadedBackup(bio.toByteArray());			
 			if (bio.size() < MIN_BACKUP_SIZE) {
 				return false;
 			}

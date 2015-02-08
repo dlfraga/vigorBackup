@@ -87,14 +87,11 @@ public class Vigor2920 extends DefaultRouterWebDownloader {
 			if (offset != contentLength) {
 				isDownloadOk = false;
 			}
-			setDownloadedBackup(data);
-			saveDataToFile(getDownloadedBackup());
-
+			setDownloadedBackup(data);			
 			isDownloadOk = true;
 
 		} catch (Exception e) {
 			isDownloadOk = false;
-
 		}
 
 		return isDownloadOk;
