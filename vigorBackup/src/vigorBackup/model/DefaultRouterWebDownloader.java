@@ -33,6 +33,10 @@ public class DefaultRouterWebDownloader extends Thread {
 	 * The backup file suffix.
 	 */
 	private static final String FILENAME_SUFFIX = "-backup.cfg";
+	/**
+	 * True if the downloader got a file successfully
+	 */
+	private boolean isBackupOK = false;
 
 	/**
 	 * Download the router's backup using all available connection addresses,
@@ -41,25 +45,21 @@ public class DefaultRouterWebDownloader extends Thread {
 	 * @return True if at least one of the links worked and the download was
 	 *         successful
 	 */
-	public final boolean downloadBackup() {
+	public void downloadBackup() {
 		boolean isBackupDone = false;
-		// int backupTry = 0;
+//		 int backupTry = 0;
 
 		for (Address addr : getRouter().getConnectionAddresses()) {
-			// backupTry++;
+//			 backupTry++;
 			// Only try new addresses if the last one didn't work
 			if (!isBackupDone) {
-				// System.out.println(backupTry + " "
-				// + addr.getAddress().toString());
+//				 System.out.println(backupTry + " "
+//				 + addr.getAddress().toString());
 				isBackupDone = downloadBackupFromUrl(addr);
 			}
 		}
-		if (isBackupDone) {
-			System.out.println("Done" + " " + getRouter().getSiteName());
-		} else {
-			System.out.println("Failed" + " " + getRouter().getSiteName());
-		}
-		return isBackupDone;
+		setBackupOK(isBackupDone);
+		if(isBackupDone) saveDataToFile(getDownloadedBackup());
 	}
 
 	/**
@@ -142,8 +142,6 @@ public class DefaultRouterWebDownloader extends Thread {
 
 	}
 
-	
-	
 	/**
 	 * Run method to support multithreaded downloads. It only executes the
 	 * backup process.
@@ -151,6 +149,25 @@ public class DefaultRouterWebDownloader extends Thread {
 	@Override
 	public void run() {
 		downloadBackup();
+	}
+
+	/**
+	 * Return the backup status
+	 * 
+	 * @return True if the download was completed successfully.
+	 */
+	public boolean isBackupOK() {
+		return isBackupOK;
+	}
+
+	/**
+	 * Sets the backups status
+	 * 
+	 * @param isBackupOK
+	 *            True if ok, false otherwise.
+	 */
+	public void setBackupOK(boolean isBackupOK) {
+		this.isBackupOK = isBackupOK;
 	}
 
 }
