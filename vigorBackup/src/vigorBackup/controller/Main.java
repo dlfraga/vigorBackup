@@ -83,9 +83,15 @@ public class Main {
 		routersDownloaders.forEach(routersDown -> {
 			execServ.execute(routersDown);
 		});
+		
 		execServ.shutdown();
 		try {
-			execServ.awaitTermination(2, TimeUnit.MINUTES);
+			System.out.println("Waiting 10 minutes for all threads to finish");
+			if(execServ.awaitTermination(10, TimeUnit.MINUTES)){
+				System.out.println("All threads finished sucessfully");
+			} else {
+				System.out.println("Some threads were killed by timeout");
+			}
 		} catch (InterruptedException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
