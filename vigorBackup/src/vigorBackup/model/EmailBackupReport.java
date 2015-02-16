@@ -6,8 +6,6 @@ import org.apache.commons.mail.DefaultAuthenticator;
 import org.apache.commons.mail.EmailException;
 import org.apache.commons.mail.HtmlEmail;
 
-import vigorBackup.controller.Main;
-
 public class EmailBackupReport {
 
 	public EmailBackupReport() {
@@ -39,20 +37,20 @@ public class EmailBackupReport {
 		sb.append("</table>");
 
 		HtmlEmail email = new HtmlEmail();
-		email.setDebug(Main.IS_SMTP_DEBUG_ON);
+		email.setDebug(LoadConfigFile.IS_SMTP_DEBUG_ON);
 		email.setSocketConnectionTimeout(10000);
 		email.setSocketTimeout(10000);
-		email.setHostName(Main.SMTP_HOST);
-		email.setSmtpPort(Main.SMTP_PORT);
+		email.setHostName(LoadConfigFile.SMTP_HOST);
+		email.setSmtpPort(LoadConfigFile.SMTP_PORT);
 		email.setAuthenticator(new DefaultAuthenticator(
-				Main.SMTP_LOGIN_USERNAME, Main.SMTP_PASSWORD));
-		email.setSSL(Main.IS_SMTP_SSL_ENABLED);
+				LoadConfigFile.SMTP_LOGIN_USERNAME, LoadConfigFile.SMTP_PASSWORD));
+		email.setSSL(LoadConfigFile.IS_SMTP_SSL_ENABLED);
 
 		try {
-			email.setFrom(Main.SMTP_FROM_EMAIL);
+			email.setFrom(LoadConfigFile.SMTP_FROM_EMAIL);
 			email.setSubject("Routers backup report");
 			email.setHtmlMsg(sb.toString());
-			email.addTo(Main.SMTP_TO_EMAIL);
+			email.addTo(LoadConfigFile.SMTP_TO_EMAIL);
 			email.send();
 		} catch (EmailException e) {
 			// TODO Auto-generated catch block

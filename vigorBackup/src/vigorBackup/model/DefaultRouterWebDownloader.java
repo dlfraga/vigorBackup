@@ -7,8 +7,6 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
-import vigorBackup.controller.Main;
-
 /**
  * Defines a Default Router Downloader that the specific routers should inherit
  * and methods that they can override as needed.
@@ -119,7 +117,7 @@ public class DefaultRouterWebDownloader extends Thread {
 	 *            The data to be saved. Usually it's the backup
 	 */
 	public final void saveDataToFile(byte[] data) {
-		String directory = Main.ROOT_DIRECTORY + this.getRouter().getSiteName();
+		String directory = LoadConfigFile.ROOT_DIRECTORY + this.getRouter().getSiteName();
 		try {
 			new File(directory).mkdirs();
 		} catch (Exception e) {
