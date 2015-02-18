@@ -17,6 +17,7 @@ public class WebDavClient {
 	private static List<DefaultRouterWebDownloader> downloadersList;
 	private static String webDavURL;
 	private static final int WEBDAV_MAX_LIST_DEPTH = 1;
+	//TODO: Try to validate if the webdav ur is valid.
 
 	public static void saveFilesToWebDav(
 			List<DefaultRouterWebDownloader> routersDownloaders) {
@@ -81,8 +82,7 @@ public class WebDavClient {
 		//
 		for (DavResource file : filesList) {
 			//Try to make sure we are not eliminating something we shouldn't.
-			if (!file.isDirectory() && file.getDisplayName().endsWith(".cfg")) {
-				System.out.println(file.getDisplayName());
+			if (!file.isDirectory() && file.getDisplayName().endsWith(".cfg")) {				
 				if (file.getModified().before(Date.from(zdt.toInstant()))) {
 					sardineClient.delete(file.getHref().toString());
 				}

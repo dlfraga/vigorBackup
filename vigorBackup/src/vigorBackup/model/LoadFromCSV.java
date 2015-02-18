@@ -81,7 +81,7 @@ public class LoadFromCSV {
 						addressList.add(address);
 					} catch (Exception e) {
 						// TODO: Log malformed address problem
-						System.out.println("Invalid URL ignored");
+						
 					}
 					index++;
 

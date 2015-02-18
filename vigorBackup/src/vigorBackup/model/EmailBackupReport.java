@@ -42,6 +42,7 @@ public class EmailBackupReport {
 		email.setSocketTimeout(10000);
 		email.setHostName(LoadConfigFile.SMTP_HOST);
 		email.setSmtpPort(LoadConfigFile.SMTP_PORT);
+		email.setSslSmtpPort(String.valueOf(LoadConfigFile.SMTP_PORT));
 		email.setAuthenticator(new DefaultAuthenticator(
 				LoadConfigFile.SMTP_LOGIN_USERNAME, LoadConfigFile.SMTP_PASSWORD));
 		email.setSSL(LoadConfigFile.IS_SMTP_SSL_ENABLED);

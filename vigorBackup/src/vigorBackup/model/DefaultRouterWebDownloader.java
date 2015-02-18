@@ -31,6 +31,7 @@ public class DefaultRouterWebDownloader extends Thread {
 	 * The backup file suffix.
 	 */
 	private static final String FILENAME_SUFFIX = "-backup.cfg";
+	
 	/**
 	 * True if the downloader got a file successfully
 	 */
@@ -57,8 +58,6 @@ public class DefaultRouterWebDownloader extends Thread {
 			}
 		}
 		setBackupOK(isBackupDone);
-		if (isBackupDone)
-			saveDataToFile(getDownloadedBackup());
 	}
 
 	/**
@@ -109,35 +108,6 @@ public class DefaultRouterWebDownloader extends Thread {
 	 */
 	public final void setDownloadedBackup(byte[] downloadedBackup) {
 		this.downloadedBackup = downloadedBackup;
-	}
-
-	/**
-	 * Saves the downloaded data to a local file.
-	 * 
-	 * @param data
-	 *            The data to be saved. Usually it's the backup
-	 */
-	public final void saveDataToFile(byte[] data) {
-		String directory = LoadConfigFile.ROOT_DIRECTORY
-				+ this.getRouter().getSiteName();
-		try {
-			new File(directory).mkdirs();
-		} catch (Exception e) {
-			// TODO: Treat the could not create directory or security exception
-			e.printStackTrace();
-		}
-
-		FileOutputStream out;
-		try {
-			out = new FileOutputStream(directory + "\\" + getBackupFileName());
-			out.write(data);
-			out.flush();
-			out.close();
-		} catch (IOException e) {
-			// TODO Can't create file
-			e.printStackTrace();
-		}
-
 	}
 
 	/**

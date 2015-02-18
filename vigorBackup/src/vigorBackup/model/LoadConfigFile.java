@@ -133,6 +133,7 @@ public class LoadConfigFile {
 				.getConfigCode());
 		SMTP_PORT = Integer.parseInt(props.getProperty(EConfigs.SMTP_PORT
 				.getConfigCode()));
+		
 		WEBDAV_ADDRESS = props.getProperty(EConfigs.WEBDAV_ADDRESS
 				.getConfigCode());
 		if (!WEBDAV_ADDRESS.endsWith("/"))
@@ -143,7 +144,6 @@ public class LoadConfigFile {
 				.getConfigCode());
 		WEBDAV_USERNAME = props.getProperty(EConfigs.WEBDAV_USERNAME
 				.getConfigCode());
-
 	}
 
 	private static void createDefaultConfigFile() {
