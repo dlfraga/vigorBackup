@@ -53,8 +53,12 @@ public class EmailBackupReport {
 			email.addTo(LoadConfigFile.SMTP_TO_EMAIL);
 			email.send();
 		} catch (EmailException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			if(!LoadConfigFile.IS_SMTP_DEBUG_ON){
+				System.out.println("Could not send the e-mail. Active the debug to know why");	
+			} else {
+				e.printStackTrace();
+			}
+			
 		}
 
 	}

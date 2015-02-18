@@ -1,19 +1,14 @@
 package vigorBackup.model;
 import java.net.URL;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
-import javax.persistence.OneToOne;
 
-
-@Entity
+//@Entity
 public class Address {
-	@Id
-	@GeneratedValue
+//	@Id
+//	@GeneratedValue
 	private Long id;
 	private URL address;
-	@OneToOne
+//	@OneToOne
 	private Router router;
 
 	public URL getAddress() {

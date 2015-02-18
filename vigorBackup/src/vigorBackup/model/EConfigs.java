@@ -4,7 +4,7 @@ package vigorBackup.model;
  * This enum takes care of the config file contents. It is used to keep the key
  * strings always constant in the program.
  */
-public enum EPropsConfigFile {
+public enum EConfigs {
 	/**
 	 * The backup directory, where all backup files will be stored.
 	 */
@@ -15,6 +15,7 @@ public enum EPropsConfigFile {
 	DAYS_TO_KEEP_FILES("days.to.keep.backups", "30"),
 	/**
 	 * The routers CSV file. It will be read on runtime.
+	 * 
 	 * @see LoadFromCSV
 	 */
 	ROUTER_LIST_FILE("routers.list.file", "routers.csv"),
@@ -54,23 +55,47 @@ public enum EPropsConfigFile {
 	/**
 	 * The smtp server port.
 	 */
-	SMTP_PORT("mail.smtp.port", "465");
+	SMTP_PORT("mail.smtp.port", "465"),
+	/**
+	 * The webdav server address.
+	 */
+	WEBDAV_ADDRESS("webdav.server", "http://webdav.server.com"),
+	/**
+	 * The webdav server username.
+	 */
+	WEBDAV_USERNAME("webdav.username", "login@webdavserver.com"),
+	/**
+	 * The webdav server password.
+	 */
+	WEBDAV_PASSWORD("webdav.password", "MyWebDavPassword");
 
 	private String configString;
 	private String defaultValue;
 
-	private EPropsConfigFile(String confString, String defaultVlue) {
+	private EConfigs(String confString, String defaultVlue) {
 		this.configString = confString;
 		this.defaultValue = defaultVlue;
 	}
 
+	/**
+	 * Gets the code that is used on the configation file. It's the first
+	 * parameter on the enum value's creation @see {@link EConfigs}.
+	 * 
+	 * @return An String with the config code.
+	 */
 	public String getConfigCode() {
 		return configString;
 	}
-	
-	public String getDefaultValue(){
+
+	/**
+	 * Gets the default value that it's used on the default configuration file
+	 * creation. It's only use is to help whoever is configuring the program.
+	 * It's the second parameter on the enum value's creation @see {@link EConfigs}.
+	 * 
+	 * @return An String with the default configuration value.
+	 */
+	public String getDefaultValue() {
 		return defaultValue;
 	}
-	
 
 }

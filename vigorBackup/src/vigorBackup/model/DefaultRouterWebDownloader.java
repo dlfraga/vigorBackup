@@ -24,8 +24,8 @@ public class DefaultRouterWebDownloader extends Thread {
 	/**
 	 * The current date to be used on the backup filename.
 	 */
-	DateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy");
-	Date date = new Date();
+	private DateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy");
+	private Date date = new Date();
 
 	/**
 	 * The backup file suffix.
@@ -45,19 +45,20 @@ public class DefaultRouterWebDownloader extends Thread {
 	 */
 	public void downloadBackup() {
 		boolean isBackupDone = false;
-//		 int backupTry = 0;
+		// int backupTry = 0;
 
 		for (Address addr : getRouter().getConnectionAddresses()) {
-//			 backupTry++;
+			// backupTry++;
 			// Only try new addresses if the last one didn't work
 			if (!isBackupDone) {
-//				 System.out.println(backupTry + " "
-//				 + addr.getAddress().toString());
+				// System.out.println(backupTry + " "
+				// + addr.getAddress().toString());
 				isBackupDone = downloadBackupFromUrl(addr);
 			}
 		}
 		setBackupOK(isBackupDone);
-		if(isBackupDone) saveDataToFile(getDownloadedBackup());
+		if (isBackupDone)
+			saveDataToFile(getDownloadedBackup());
 	}
 
 	/**
@@ -117,7 +118,8 @@ public class DefaultRouterWebDownloader extends Thread {
 	 *            The data to be saved. Usually it's the backup
 	 */
 	public final void saveDataToFile(byte[] data) {
-		String directory = LoadConfigFile.ROOT_DIRECTORY + this.getRouter().getSiteName();
+		String directory = LoadConfigFile.ROOT_DIRECTORY
+				+ this.getRouter().getSiteName();
 		try {
 			new File(directory).mkdirs();
 		} catch (Exception e) {
@@ -125,11 +127,9 @@ public class DefaultRouterWebDownloader extends Thread {
 			e.printStackTrace();
 		}
 
-		String filename = directory + "\\" + this.getRouter().getSiteName()
-				+ "-" + dateFormat.format(date) + FILENAME_SUFFIX;
 		FileOutputStream out;
 		try {
-			out = new FileOutputStream(filename);
+			out = new FileOutputStream(directory + "\\" + getBackupFileName());
 			out.write(data);
 			out.flush();
 			out.close();
@@ -138,6 +138,17 @@ public class DefaultRouterWebDownloader extends Thread {
 			e.printStackTrace();
 		}
 
+	}
+
+	/**
+	 * Formats the correct filename for the backup file. It's used to make all
+	 * saving implementations uniform.
+	 * 
+	 * @return The formatted filename.
+	 */
+	public String getBackupFileName() {
+		return this.getRouter().getSiteName() + "-" + dateFormat.format(date)
+				+ FILENAME_SUFFIX;
 	}
 
 	/**

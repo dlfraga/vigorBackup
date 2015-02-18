@@ -4,24 +4,17 @@ import java.util.Base64;
 import java.util.Calendar;
 import java.util.List;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
-import javax.persistence.OneToMany;
-import javax.persistence.Temporal;
-import javax.persistence.TemporalType;
-
-@Entity
+//@Entity
 public class Router {
-	@Id
-	@GeneratedValue
+//	@Id
+//	@GeneratedValue
 	private Long id;
 	private String description;
 	private String siteName;
 	private boolean isOk;
-	@Temporal(TemporalType.DATE)
+//	@Temporal(TemporalType.DATE)
 	private Calendar lastBackupDate;
-	@OneToMany(mappedBy="router")
+//	@OneToMany(mappedBy="router")
 	private List<Address> connectionAddresses;
 	private String password;
 	private String username;
