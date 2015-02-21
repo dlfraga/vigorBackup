@@ -75,6 +75,12 @@ public class LoadConfigFile {
 	public static String WEBDAV_PASSWORD;
 
 	/**
+	 * The CSV file separator. It can be anything, but it's recommended that
+	 * it's not a commonly used character.
+	 */
+	public static char CSV_FILE_SEPARATOR;
+
+	/**
 	 * Default configuration filename that the program will try to load on
 	 * startup, if we don't receive a string on the program args.
 	 */
@@ -133,17 +139,21 @@ public class LoadConfigFile {
 				.getConfigCode());
 		SMTP_PORT = Integer.parseInt(props.getProperty(EConfigs.SMTP_PORT
 				.getConfigCode()));
-		
+		ROUTER_LIST_FILE = props.getProperty(EConfigs.ROUTER_LIST_FILE.getConfigCode());
+
 		WEBDAV_ADDRESS = props.getProperty(EConfigs.WEBDAV_ADDRESS
 				.getConfigCode());
 		if (!WEBDAV_ADDRESS.endsWith("/"))
 			WEBDAV_ADDRESS += "/";
-		WEBDAV_ADDRESS = WEBDAV_ADDRESS.replaceAll(" ","%20");
+		WEBDAV_ADDRESS = WEBDAV_ADDRESS.replaceAll(" ", "%20");
 
 		WEBDAV_PASSWORD = props.getProperty(EConfigs.WEBDAV_PASSWORD
 				.getConfigCode());
 		WEBDAV_USERNAME = props.getProperty(EConfigs.WEBDAV_USERNAME
 				.getConfigCode());
+		CSV_FILE_SEPARATOR = props.getProperty(
+				EConfigs.CSV_FILE_SEPARATOR.getConfigCode()).charAt(0);
+
 	}
 
 	private static void createDefaultConfigFile() {

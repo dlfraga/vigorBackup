@@ -14,6 +14,7 @@ import vigorBackup.model.LoadConfigFile;
 import vigorBackup.model.LoadFromCSV;
 import vigorBackup.model.Router;
 import vigorBackup.model.WebDavClient;
+
 /**
  * Main class. It starts the backup routines.
  */
@@ -22,7 +23,8 @@ public class Main {
 	 * List of the downloaders for the routers
 	 */
 	private static List<DefaultRouterWebDownloader> routersDownloaders = new ArrayList<>();
-	
+	private static List<Router> routerList = new ArrayList<>();
+
 	/**
 	 * Main class.
 	 * 
@@ -32,6 +34,7 @@ public class Main {
 	 */
 	public static void main(String[] args) {
 		LoadConfigFile.loadConfigFile(args);
+		routerList = LoadFromCSV.loadCsv();
 		backupFiles();
 		WebDavClient.saveFilesToWebDav(routersDownloaders);
 		FileSystemClient.saveToFileSystem(routersDownloaders);
@@ -39,13 +42,12 @@ public class Main {
 	}
 
 	/**
-	 * TODO: Document this method.
+	 * Backup the firmware of the loaded router list. This method lauches all
+	 * backups simultaneously and waits for then to end before continuing.
 	 */
 	private static void backupFiles() {
 		routersDownloaders = new ArrayList<>();
-		LoadFromCSV importcsv = new LoadFromCSV();
-		List<Router> routerList = importcsv.loadCsv();
-		// Java 8 
+		// Java 8
 		routerList.forEach(router -> routersDownloaders.add(ERouterModels
 				.returnDownloader(router)));
 		// Uses a executor service to lauch all the threads
@@ -67,7 +69,5 @@ public class Main {
 			e.printStackTrace();
 		}
 	}
-
-
 
 }

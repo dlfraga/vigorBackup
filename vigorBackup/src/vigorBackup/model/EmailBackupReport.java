@@ -7,10 +7,7 @@ import org.apache.commons.mail.EmailException;
 import org.apache.commons.mail.HtmlEmail;
 
 public class EmailBackupReport {
-
-	public EmailBackupReport() {
-		// TODO Auto-generated constructor stub
-	}
+private static final String EMAIL_SEPARATOR = ",";
 
 	public static void sendBackupReport(
 			List<DefaultRouterWebDownloader> routersDownloaders) {
@@ -51,7 +48,10 @@ public class EmailBackupReport {
 			email.setFrom(LoadConfigFile.SMTP_FROM_EMAIL);
 			email.setSubject("Routers backup report");
 			email.setHtmlMsg(sb.toString());
-			email.addTo(LoadConfigFile.SMTP_TO_EMAIL);
+			String[] emails = LoadConfigFile.SMTP_TO_EMAIL.split(EMAIL_SEPARATOR);
+			for (int i = 0; i < emails.length; i++) {
+				email.addTo(emails[i]);
+			}
 			email.send();
 		} catch (EmailException e) {
 			if(!LoadConfigFile.IS_SMTP_DEBUG_ON){

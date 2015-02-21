@@ -39,7 +39,7 @@ public enum EConfigs {
 	/**
 	 * The e-mail address to send e-mail to.
 	 */
-	SMTP_TO_EMAIL("mail.smtp.to", "destination@changeme.com"),
+	SMTP_TO_EMAIL("mail.smtp.to", "first.destination@changeme.com, second.destination@changeme.com"),
 	/**
 	 * The address that the e-mail is sent from.
 	 */
@@ -67,8 +67,12 @@ public enum EConfigs {
 	/**
 	 * The webdav server password.
 	 */
-	WEBDAV_PASSWORD("webdav.password", "MyWebDavPassword");
-
+	WEBDAV_PASSWORD("webdav.password", "MyWebDavPassword"),
+	/**
+	 * The CSV routerFile separator.
+	 */
+	CSV_FILE_SEPARATOR("csv.router.file.separator", ";");
+	
 	private String configString;
 	private String defaultValue;
 
@@ -90,7 +94,8 @@ public enum EConfigs {
 	/**
 	 * Gets the default value that it's used on the default configuration file
 	 * creation. It's only use is to help whoever is configuring the program.
-	 * It's the second parameter on the enum value's creation @see {@link EConfigs}.
+	 * It's the second parameter on the enum value's creation @see
+	 * {@link EConfigs}.
 	 * 
 	 * @return An String with the default configuration value.
 	 */
