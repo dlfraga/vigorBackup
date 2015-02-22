@@ -39,7 +39,7 @@ public enum EConfigs {
 	/**
 	 * The e-mail address to send e-mail to.
 	 */
-	SMTP_TO_EMAIL("mail.smtp.to", "first.destination@changeme.com, second.destination@changeme.com"),
+	SMTP_TO_EMAIL("mail.smtp.to", "first@changeme.com, second@changeme.com"),
 	/**
 	 * The address that the e-mail is sent from.
 	 */
@@ -72,12 +72,26 @@ public enum EConfigs {
 	 * The CSV routerFile separator.
 	 */
 	CSV_FILE_SEPARATOR("csv.router.file.separator", ";");
-	
-	private String configString;
+
+	/**
+	 * The string that will be used to load the values from the config files.
+	 */
+	private String configKey;
+	/**
+	 * The default value that will be inserted when creating config files.
+	 */
 	private String defaultValue;
 
-	private EConfigs(String confString, String defaultVlue) {
-		this.configString = confString;
+	/**
+	 * Enum's construtor.
+	 * 
+	 * @param confString
+	 *            The key to the configuration file.
+	 * @param defaultVlue
+	 *            The default value to the configuration file.
+	 */
+	private EConfigs(final String confString, final String defaultVlue) {
+		this.configKey = confString;
 		this.defaultValue = defaultVlue;
 	}
 
@@ -88,7 +102,7 @@ public enum EConfigs {
 	 * @return An String with the config code.
 	 */
 	public String getConfigCode() {
-		return configString;
+		return configKey;
 	}
 
 	/**

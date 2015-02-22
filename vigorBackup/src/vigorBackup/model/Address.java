@@ -1,33 +1,67 @@
 package vigorBackup.model;
+
 import java.net.URL;
 
-
-//@Entity
+/**
+ * Address that can be used to access the router. 
+ */
 public class Address {
-//	@Id
-//	@GeneratedValue
+	//This class is prepared to be an entity in hibernate.
+	/**
+	 * Address id.
+	 */
 	private Long id;
+	/**
+	 * The address url.
+	 */
 	private URL address;
-//	@OneToOne
+	/**
+	 * The router that this address belongs to.
+	 */
 	private Router router;
 
-	public URL getAddress() {
+	/**
+	 * Gets the address.
+	 * 
+	 * @return The address.
+	 */
+	public final URL getAddress() {
 		return address;
 	}
 
-	public void setAddress(URL address) {
-		this.address = address;
+	/**
+	 * Sets the address.
+	 * 
+	 * @param addr
+	 *            The address to be set.
+	 */
+	public final void setAddress(final URL addr) {
+		this.address = addr;
 	}
 
-	public Router getRouter() {
+	/**
+	 * Gets the associated router.
+	 * 
+	 * @return The router.
+	 */
+	public final Router getRouter() {
 		return router;
 	}
 
-	public void setRouter(Router router) {
-		this.router = router;
+	/**
+	 * Sets the router.
+	 * @param routr
+	 *            The router to be set.
+	 */
+	public final void setRouter(final Router routr) {
+		this.router = routr;
 	}
 
-	public Long getId() {
+	/**
+	 * Gets the address id.
+	 * @return The id.
+	 */
+	public final Long getId() {
 		return id;
 	}
 

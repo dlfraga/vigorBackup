@@ -8,7 +8,7 @@ import java.util.Date;
  * Defines a Default Router Downloader that the specific routers should inherit
  * and methods that they can override as needed.
  */
-public class DefaultRouterWebDownloader extends Thread {
+public abstract class DefaultRouterWebDownloader extends Thread {
 
 	/**
 	 * The router that will have its firmware downloaded.
@@ -19,9 +19,12 @@ public class DefaultRouterWebDownloader extends Thread {
 	 */
 	private byte[] downloadedBackup;
 	/**
-	 * The current date to be used on the backup filename.
+	 * The Date Format that will be used in the backup filename.
 	 */
 	private DateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy");
+	/**
+	 * The current date to be used on the backup format.
+	 */
 	private Date date = new Date();
 
 	/**
@@ -30,7 +33,7 @@ public class DefaultRouterWebDownloader extends Thread {
 	private static final String FILENAME_SUFFIX = "-backup.cfg";
 	
 	/**
-	 * True if the downloader got a file successfully
+	 * True if the downloader got a file successfully.
 	 */
 	private boolean isBackupOK = false;
 
@@ -38,10 +41,8 @@ public class DefaultRouterWebDownloader extends Thread {
 	 * Download the router's backup using all available connection addresses,
 	 * sequentially.
 	 * 
-	 * @return True if at least one of the links worked and the download was
-	 *         successful
 	 */
-	public void downloadBackup() {
+	public final void downloadBackup() {
 		boolean isBackupDone = false;
 		// int backupTry = 0;
 
@@ -64,17 +65,14 @@ public class DefaultRouterWebDownloader extends Thread {
 	 *            The address that will be used to download the file
 	 * @return True if the download was successful
 	 */
-	public boolean downloadBackupFromUrl(Address address) {
-		return false;
-
-	}
+	public abstract boolean downloadBackupFromUrl(final Address address);
 
 	/**
-	 * @param router
+	 * @param routr
 	 *            The router object that needs to have it's backup downloaded
 	 */
-	public DefaultRouterWebDownloader(Router router) {
-		this.router = router;
+	public DefaultRouterWebDownloader(final Router routr) {
+		this.router = routr;
 	}
 
 	/**
@@ -85,11 +83,11 @@ public class DefaultRouterWebDownloader extends Thread {
 	}
 
 	/**
-	 * @param router
+	 * @param routr
 	 *            the router to set
 	 */
-	public final void setRouter(Router router) {
-		this.router = router;
+	public final void setRouter(final Router routr) {
+		this.router = routr;
 	}
 
 	/**
@@ -100,11 +98,11 @@ public class DefaultRouterWebDownloader extends Thread {
 	}
 
 	/**
-	 * @param downloadedBackup
+	 * @param downloadedBackp
 	 *            the downloadedBackup to set
 	 */
-	public final void setDownloadedBackup(byte[] downloadedBackup) {
-		this.downloadedBackup = downloadedBackup;
+	public final void setDownloadedBackup(final byte[] downloadedBackp) {
+		this.downloadedBackup = downloadedBackp;
 	}
 
 	/**
@@ -113,7 +111,7 @@ public class DefaultRouterWebDownloader extends Thread {
 	 * 
 	 * @return The formatted filename.
 	 */
-	public String getBackupFileName() {
+	public final String getBackupFileName() {
 		return this.getRouter().getSiteName() + "-" + dateFormat.format(date)
 				+ FILENAME_SUFFIX;
 	}
@@ -123,27 +121,27 @@ public class DefaultRouterWebDownloader extends Thread {
 	 * backup process.
 	 */
 	@Override
-	public void run() {
+	public final void run() {
 		downloadBackup();
 	}
 
 	/**
-	 * Return the backup status
+	 * Return the backup status.
 	 * 
 	 * @return True if the download was completed successfully.
 	 */
-	public boolean isBackupOK() {
+	public final boolean isBackupOK() {
 		return isBackupOK;
 	}
 
 	/**
-	 * Sets the backups status
+	 * Sets the backups status.
 	 * 
-	 * @param isBackupOK
+	 * @param isBackpOK
 	 *            True if ok, false otherwise.
 	 */
-	public void setBackupOK(boolean isBackupOK) {
-		this.isBackupOK = isBackupOK;
+	public final void setBackupOK(final boolean isBackpOK) {
+		this.isBackupOK = isBackpOK;
 	}
 
 }
