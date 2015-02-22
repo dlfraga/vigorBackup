@@ -4,146 +4,232 @@ import java.util.Base64;
 import java.util.Calendar;
 import java.util.List;
 
-//@Entity
+/**
+ * Router class. It's used to store all data needed to download the files.
+ */
 public class Router {
-//	@Id
-//	@GeneratedValue
+	/**
+	 * ID of the router. Not currently in use.
+	 */
 	private Long id;
-	private String description;
+	/**
+	 * Description of the router.
+	 */
+	private String descri;
+	/**
+	 * Where the router is.
+	 */
 	private String siteName;
+	/**
+	 * Was the last backup ok?
+	 */
 	private boolean isOk;
-//	@Temporal(TemporalType.DATE)
+	/**
+	 * Last backup date.
+	 */
 	private Calendar lastBackupDate;
-//	@OneToMany(mappedBy="router")
+	/**
+	 * List of connection addresses.
+	 */
 	private List<Address> connectionAddresses;
-	private String password;
-	private String username;
+	/**
+	 * Router's passwd.
+	 */
+	private String passwd;
+	/**
+	 * Router's login.
+	 */
+	private String login;
+	/**
+	 * Router model, as in {@link ERouterModels}.
+	 */
 	private ERouterModels routerModel;
-	
 
+	/**
+	 * Instantiates a new router.
+	 */
 	public Router() {
 
 	}
 
-	public String getDescription() {
-		return description;
+	/**
+	 * Gets the router descri.
+	 * 
+	 * @return Router's descri.
+	 */
+	public final String getDescription() {
+		return descri;
 	}
 
-	public void setDescription(String description) {
-		this.description = description;
+	/**
+	 * Sets the router's descriptions.
+	 * 
+	 * @param description
+	 *            The new description.
+	 */
+	public final void setDescription(final String description) {
+		this.descri = description;
 	}
 
-	public boolean isOk() {
+	/**
+	 * Was the last backup ok?
+	 * 
+	 * @return True if the last backup was completed successfully.
+	 */
+	public final boolean isOk() {
 		return isOk;
 	}
 
-	public void setOk(boolean isOk) {
-		this.isOk = isOk;
+	/**
+	 * Sets the last backup status.
+	 * 
+	 * @param status
+	 *            The status.
+	 */
+	public final void setOk(final boolean status) {
+		this.isOk = status;
 	}
 
-	public Calendar getLastBackupDate() {
+	/**
+	 * Gets the last backup date.
+	 * 
+	 * @return The last backup date.
+	 */
+	public final Calendar getLastBackupDate() {
 		return lastBackupDate;
 	}
 
-	public void setLastBackupDate(Calendar lastBackupDate) {
-		this.lastBackupDate = lastBackupDate;
+	/**
+	 * Sets the last backup date.
+	 * 
+	 * @param date
+	 *            The backup date.
+	 */
+	public final void setLastBackupDate(final Calendar date) {
+		this.lastBackupDate = date;
 	}
 
-	public Long getId() {
+	/**
+	 * Gets the router's ID.
+	 * 
+	 * @return The id.
+	 */
+	public final Long getId() {
 		return id;
 	}
 
-	public List<Address> getConnectionAddresses() {
+	/**
+	 * Gets a list of all connection addresses.
+	 * 
+	 * @return A list of connections addresses.
+	 */
+	public final List<Address> getConnectionAddresses() {
 		return connectionAddresses;
 	}
 
-	public void setConnectionAddresses(List<Address> list) {
+	/**
+	 * Sets the connection address list.
+	 * 
+	 * @param list
+	 *            The list of addresses.
+	 */
+	public final void setConnectionAddresses(final List<Address> list) {
 		this.connectionAddresses = list;
 	}
 
 	/**
-	 * @return the password
+	 * @return the passwd
 	 */
-	public String getPassword() {
-		return password;
+	public final String getPassword() {
+		return passwd;
 	}
 
 	/**
-	 * @param password the password to set
+	 * @param password
+	 *            the password to set
 	 */
-	public void setPassword(String password) {
-		this.password = password;
+	public final void setPassword(final String password) {
+		this.passwd = password;
 	}
 
 	/**
-	 * @return the username
+	 * @return the login
 	 */
-	public String getUsername() {
-		return username;
+	public final String getUsername() {
+		return login;
 	}
 
 	/**
-	 * @param username the username to set
+	 * @param username
+	 *            the login to set
 	 */
-	public void setUsername(String username) {
-		this.username = username;
+	public final void setUsername(final String username) {
+		this.login = username;
 	}
-	
+
 	/**
-	 * Encodes the plain text username in base64
-	 * @return The encoded username
+	 * Encodes the plain text login in base64.
+	 * 
+	 * @return The encoded login
 	 */
-	public String getBase64EncodedUsername(){
+	public final String getBase64EncodedUsername() {
 		return Base64.getEncoder().encodeToString(getUsername().getBytes());
 	}
+
 	/**
-	 * Encodes the plain text password in base64
-	 * @return the encoded password
+	 * Encodes the plain text passwd in base64.
+	 * 
+	 * @return the encoded passwd
 	 */
-	public String getBase64EncodedPassword(){
+	public final String getBase64EncodedPassword() {
 		return Base64.getEncoder().encodeToString(getPassword().getBytes());
 	}
 
 	/**
-	 * Gets the site name, to be used as a description of where the router is
+	 * Gets the site name, to be used as a descri of where the router is.
+	 * 
 	 * @return The name of the site
 	 */
-	public String getSiteName() {
+	public final String getSiteName() {
 		return siteName;
 	}
 
 	/**
-	 * Gets the site name, to be used as a description of where the router is
-	 * @param siteName The site name.
+	 * Gets the site name, to be used as a descri of where the router is.
+	 * 
+	 * @param siteNme
+	 *            The site name.
 	 */
-	public void setSiteName(String siteName) {
-		this.siteName = siteName;
+	public final void setSiteName(final String siteNme) {
+		this.siteName = siteNme;
 	}
 
 	/**
 	 * Gets the router model.
+	 * 
 	 * @return The model.
 	 * @see ERouterModels
 	 */
-	public ERouterModels getRouterModel() {
+	public final ERouterModels getRouterModel() {
 		return routerModel;
 	}
 
 	/**
 	 * Sets the current router model.
-	 * @param routerModel The model.
+	 * 
+	 * @param routerMdel
+	 *            The model.
 	 * @see ERouterModels
 	 */
-	public void setRouterModel(ERouterModels routerModel) {
-		this.routerModel = routerModel;
+	public final void setRouterModel(final ERouterModels routerMdel) {
+		this.routerModel = routerMdel;
 	}
 
 	@Override
-	public String toString() {
-	return getRouterModel().name() + getSiteName() + getUsername() + getPassword() + getConnectionAddresses().toString();
-		
+	public final String toString() {
+		return getRouterModel().name() + getSiteName() + getUsername()
+				+ getPassword() + getConnectionAddresses().toString();
+
 	}
 
-
-	
 }

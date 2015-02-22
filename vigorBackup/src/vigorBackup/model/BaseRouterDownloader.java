@@ -5,10 +5,10 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 
 /**
- * Defines a Default Router Downloader that the specific routers should inherit
- * and methods that they can override as needed.
+ * Defines a Default Router Downloader that the concrete routers should inherit
+ * and the methods that must be overridden.
  */
-public abstract class DefaultRouterWebDownloader extends Thread {
+public abstract class BaseRouterDownloader extends Thread {
 
 	/**
 	 * The router that will have its firmware downloaded.
@@ -71,7 +71,7 @@ public abstract class DefaultRouterWebDownloader extends Thread {
 	 * @param routr
 	 *            The router object that needs to have it's backup downloaded
 	 */
-	public DefaultRouterWebDownloader(final Router routr) {
+	public BaseRouterDownloader(final Router routr) {
 		this.router = routr;
 	}
 

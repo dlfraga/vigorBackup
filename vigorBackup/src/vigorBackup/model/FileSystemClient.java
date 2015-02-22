@@ -10,22 +10,24 @@ import java.time.ZonedDateTime;
 import java.util.Arrays;
 import java.util.Comparator;
 import java.util.List;
-
-public class FileSystemClient {
+/**
+ * This class is responsible for saving of files to the FileSystem.
+ */
+public final class FileSystemClient {
 
 	/**
 	 * Saves the files got by the downloaders to disk. Only downloaders that
 	 * successfully downloaded files are processed.
 	 * 
-	 * @param routerDonwloaderList
+	 * @param downloaderList
 	 *            The list of downloaders to have their backups saved.
 	 */
 	public static void saveToFileSystem(
-			List<DefaultRouterWebDownloader> routerDonwloaderList) {
+			final List<BaseRouterDownloader> downloaderList) {
 
-		for (DefaultRouterWebDownloader defaultRouterWebDownloader : routerDonwloaderList) {
-			if (defaultRouterWebDownloader.isBackupOK()) {
-				saveDataToFile(defaultRouterWebDownloader);
+		for (BaseRouterDownloader downloader : downloaderList) {
+			if (downloader.isBackupOK()) {
+				saveDataToFile(downloader);
 			}
 		}
 
@@ -34,10 +36,10 @@ public class FileSystemClient {
 	/**
 	 * Saves the downloaded data to a local file.
 	 * 
-	 * @param data
-	 *            The data to be saved. Usually it's the backup
+	 * @param downloader
+	 *            The downloader that we will get the backup file from.
 	 */
-	private static void saveDataToFile(DefaultRouterWebDownloader downloader) {
+	private static void saveDataToFile(final BaseRouterDownloader downloader) {
 		String directory = LoadConfigFile.ROOT_DIRECTORY
 				+ downloader.getRouter().getSiteName();
 		try {
@@ -45,7 +47,8 @@ public class FileSystemClient {
 		} catch (Exception e) {
 			if (!LoadConfigFile.IS_SMTP_DEBUG_ON) {
 				System.out
-						.println("Error creating backup directory. Activate debug for more info");
+						.println("Error creating backup directory. "
+								+ "Activate debug for more info");
 			} else {
 				e.printStackTrace();
 			}
@@ -62,7 +65,8 @@ public class FileSystemClient {
 		} catch (IOException e) {
 			if (!LoadConfigFile.IS_SMTP_DEBUG_ON) {
 				System.out
-						.println("Error saving files. Activate debug for more info");
+						.println("Error saving files. "
+								+ "Activate debug for more info");
 			} else {
 				e.printStackTrace();
 			}
@@ -76,7 +80,7 @@ public class FileSystemClient {
 	 * @param directory
 	 *            The backup where the files are stored.
 	 */
-	private static void cleanOldBackups(String directory) {
+	private static void cleanOldBackups(final String directory) {
 
 		File dir = new File(directory);
 		LocalDateTime minusDate = LocalDateTime.now().minusDays(
@@ -87,7 +91,7 @@ public class FileSystemClient {
 		FileFilter backupFileFilter = new FileFilter() {
 
 			@Override
-			public boolean accept(File file) {
+			public boolean accept(final File file) {
 				if (file.isFile()) {
 					String path = file.getAbsolutePath().toLowerCase();
 					if (path.endsWith(".cfg")) {
@@ -107,13 +111,16 @@ public class FileSystemClient {
 		Arrays.sort(backups, new Comparator<File>() {
 
 			@Override
-			public int compare(File o1, File o2) {
-				if (o1.lastModified() > o2.lastModified())
+			public int compare(final File o1, final File o2) {
+				if (o1.lastModified() > o2.lastModified()) {
 					return 1;
-				if (o1.lastModified() < o2.lastModified())
+				}
+				if (o1.lastModified() < o2.lastModified()) {
 					return -1;
-				if (o1.lastModified() == o2.lastModified())
+				}
+				if (o1.lastModified() == o2.lastModified()) {
 					return 0;
+				}
 				return 0;
 			}
 		});
@@ -126,5 +133,10 @@ public class FileSystemClient {
 			backups[0].delete();
 		}
 	}
-
+	/**
+	 * Private constructor. This class should not be instantiated.
+	 */
+	private FileSystemClient() {
+	
+	}
 }

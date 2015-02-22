@@ -6,7 +6,7 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
 
-import vigorBackup.model.DefaultRouterWebDownloader;
+import vigorBackup.model.BaseRouterDownloader;
 import vigorBackup.model.ERouterModels;
 import vigorBackup.model.EmailBackupReport;
 import vigorBackup.model.FileSystemClient;
@@ -22,7 +22,7 @@ public class Main {
 	/**
 	 * List of the downloaders for the routers
 	 */
-	private static List<DefaultRouterWebDownloader> routersDownloaders = new ArrayList<>();
+	private static List<BaseRouterDownloader> routersDownloaders = new ArrayList<>();
 	private static List<Router> routerList = new ArrayList<>();
 
 	/**

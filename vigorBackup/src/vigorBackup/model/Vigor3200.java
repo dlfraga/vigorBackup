@@ -6,7 +6,7 @@ import java.io.InputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
 
-public class Vigor3200 extends DefaultRouterWebDownloader{
+public class Vigor3200 extends BaseRouterDownloader{
 	private String cookie;
 	private HttpURLConnection connection;
 	private final static String FILE_DOWNLOAD_STRING = "/V3200_temp.cfg";

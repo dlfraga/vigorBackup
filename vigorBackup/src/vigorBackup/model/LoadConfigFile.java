@@ -6,7 +6,11 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.Properties;
 
-public class LoadConfigFile {
+/**
+ * This class is responsible for loading the config file. The static fields in
+ * it are used by other classes.
+ */
+public final class LoadConfigFile {
 	/**
 	 * Root directory to save downloaded files. It's loaded from the config file
 	 */
@@ -16,7 +20,7 @@ public class LoadConfigFile {
 	 */
 	public static int DAYS_TO_KEEP_FILES;
 	/**
-	 * CSV router list
+	 * CSV router list.
 	 * 
 	 * @see LoadFromCSV
 	 */
@@ -46,7 +50,7 @@ public class LoadConfigFile {
 	 */
 	public static String SMTP_TO_EMAIL;
 	/**
-	 * The "FROM" address in the e-mail;
+	 * The "FROM" address in the e-mail.
 	 */
 	public static String SMTP_FROM_EMAIL;
 	/**
@@ -90,15 +94,23 @@ public class LoadConfigFile {
 	 */
 	private static Properties props;
 
-	public static void loadConfigFile(String[] args) {
+	/**
+	 * Loads the config file from disk.
+	 * 
+	 * @param args
+	 *            The args received from the main method, including the config
+	 *            file path.
+	 */
+	public static void loadConfigFile(final String[] args) {
 		File configFile = null;
 		if (args == null || args.length == 0 || args[0].equalsIgnoreCase("")) {
 			configFile = new File(DEFAULT_CONFIG_FILENAME);
 			if (!configFile.exists()) {
-				System.out
-						.println("You didn't specify a config file location and I \n"
-								+ "didn't find one on the current directory. \n"
-								+ "I'm going to create a default one for you to customize");
+				System.out.println("You didn't specify a config "
+						+ "file location and I \n" + "didn't find one on the "
+						+ "current directory. \n"
+						+ "I'm going to create a default "
+						+ "one for you to customize");
 				createDefaultConfigFile();
 				System.exit(1);
 			}
@@ -110,9 +122,9 @@ public class LoadConfigFile {
 		try {
 			props.load(new FileInputStream(configFile));
 		} catch (IOException e) {
-			System.out
-					.println("The specified config file could not be found \n"
-							+ "To create a default one start the program without arguments");
+			System.out.println("The specified config "
+					+ "file could not be found \n" + "To create a default one "
+					+ "start the program without arguments");
 			System.exit(1);
 		}
 		// TODO: Find a better way to deal with the Enum and the static
@@ -139,12 +151,14 @@ public class LoadConfigFile {
 				.getConfigCode());
 		SMTP_PORT = Integer.parseInt(props.getProperty(EConfigs.SMTP_PORT
 				.getConfigCode()));
-		ROUTER_LIST_FILE = props.getProperty(EConfigs.ROUTER_LIST_FILE.getConfigCode());
+		ROUTER_LIST_FILE = props.getProperty(EConfigs.ROUTER_LIST_FILE
+				.getConfigCode());
 
 		WEBDAV_ADDRESS = props.getProperty(EConfigs.WEBDAV_ADDRESS
 				.getConfigCode());
-		if (!WEBDAV_ADDRESS.endsWith("/"))
+		if (!WEBDAV_ADDRESS.endsWith("/")) {
 			WEBDAV_ADDRESS += "/";
+		}
 		WEBDAV_ADDRESS = WEBDAV_ADDRESS.replaceAll(" ", "%20");
 
 		WEBDAV_PASSWORD = props.getProperty(EConfigs.WEBDAV_PASSWORD
@@ -156,6 +170,10 @@ public class LoadConfigFile {
 
 	}
 
+	/**
+	 * Creates a default configuration file if one wasn't specified or found. It
+	 * uses the default values that can be found in {@link EConfigs}.
+	 */
 	private static void createDefaultConfigFile() {
 		StringBuilder sampleData = new StringBuilder();
 		for (int i = 0; i < EConfigs.values().length; i++) {
@@ -174,6 +192,13 @@ public class LoadConfigFile {
 			System.out.println("Could not create the sample configuation file");
 		}
 
+	}
+
+	/**
+	 * This class should not be instantiated.
+	 */
+	private LoadConfigFile() {
+		// not used
 	}
 
 }

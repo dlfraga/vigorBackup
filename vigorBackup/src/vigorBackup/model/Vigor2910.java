@@ -12,15 +12,17 @@ import java.util.Base64;
  * @author Daniel
  */
 
-public class Vigor2910 extends DefaultRouterWebDownloader {
-
-	public Vigor2910(Router router) {
-		super(router);
+public class Vigor2910 extends BaseRouterDownloader {
+	/**
+	 * Vigor 2910.
+	 * @param routr The router.
+	 */
+	public Vigor2910(final Router routr) {
+		super(routr);
 	}
 
-	
 	@Override
-	public boolean downloadBackupFromUrl(Address address) {
+	public final boolean downloadBackupFromUrl(final Address address) {
 		try {
 			String stringAdd = address.getAddress().toString();
 			stringAdd += "/V2910_date.cfg";
@@ -33,7 +35,8 @@ public class Vigor2910 extends DefaultRouterWebDownloader {
 				final String authString = getRouter().getUsername() + ":"
 						+ getRouter().getPassword();
 				urc.setRequestProperty("Authorization", "Basic "
-						+ Base64.getEncoder().encodeToString(authString.getBytes()));
+						+ Base64.getEncoder()
+						.encodeToString(authString.getBytes()));
 
 			}
 			urc.setAllowUserInteraction(true);
@@ -47,8 +50,9 @@ public class Vigor2910 extends DefaultRouterWebDownloader {
 			int offset = 0;
 			while (offset < contentLength) {
 				bytesRead = in.read(data, offset, data.length - offset);
-				if (bytesRead == -1)
+				if (bytesRead == -1) {
 					break;
+				}
 				offset += bytesRead;
 			}
 			in.close();

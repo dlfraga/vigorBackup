@@ -9,7 +9,7 @@ import java.util.Base64;
 
 import javax.net.ssl.HttpsURLConnection;
 
-public class Vigor3300 extends DefaultRouterWebDownloader {
+public class Vigor3300 extends BaseRouterDownloader {
 	// I don't know how to validate if the backup was really successful, so we
 	// use this minimum size to guess.
 	private int MIN_BACKUP_SIZE = 5072;

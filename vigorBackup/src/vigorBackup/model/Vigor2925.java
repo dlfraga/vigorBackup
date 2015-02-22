@@ -16,9 +16,9 @@ import javax.net.ssl.X509TrustManager;
 /**
  * This class implements the backup routines specific to Vigor2925 routers.
  * 
- * @see DefaultRouterWebDownloader
+ * @see BaseRouterDownloader
  */
-public class Vigor2925 extends DefaultRouterWebDownloader {
+public class Vigor2925 extends BaseRouterDownloader {
 	private String cookie;
 	private HttpURLConnection connection;
 	private final static String FILE_DOWNLOAD_STRING = "/V2925_temp.cfg";

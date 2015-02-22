@@ -6,7 +6,7 @@ import java.io.InputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
 
-public class Vigor2920 extends DefaultRouterWebDownloader {
+public class Vigor2920 extends BaseRouterDownloader {
 	private String cookie;
 	private HttpURLConnection connection;
 	private final static String FILE_DOWNLOAD_STRING = "/V2920_temp.cfg";
@@ -78,8 +78,9 @@ public class Vigor2920 extends DefaultRouterWebDownloader {
 			int offset = 0;
 			while (offset < contentLength) {
 				bytesRead = in.read(data, offset, data.length - offset);
-				if (bytesRead == -1)
+				if (bytesRead == -1) {
 					break;
+				}
 				offset += bytesRead;
 			}
 			in.close();

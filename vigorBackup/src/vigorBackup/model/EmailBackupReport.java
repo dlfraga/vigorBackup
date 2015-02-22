@@ -33,7 +33,7 @@ public final class EmailBackupReport {
 	 *            The list of downloaders to build the report.
 	 */
 	public static void sendBackupReport(
-			final List<DefaultRouterWebDownloader> routersDownloaders) {
+			final List<BaseRouterDownloader> routersDownloaders) {
 		// TODO: treat auth not needed
 		StringBuilder sb = new StringBuilder();
 		sb.append("<table border=\"1\"><tr>" + "<th>Cliente</th>"

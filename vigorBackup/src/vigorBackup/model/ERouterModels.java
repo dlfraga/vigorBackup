@@ -2,7 +2,6 @@ package vigorBackup.model;
 
 import java.util.EnumSet;
 import java.util.HashMap;
-import java.util.Map;
 
 /**
  * This enum holds all router types to be used in the application. It is also
@@ -14,27 +13,37 @@ public enum ERouterModels {
 	 * data.
 	 */
 	VIGOR_2925(0), VIGOR_2910(1), VIGOR_3300(2), VIGOR_2920(3), VIGOR_3200(4);
+	/**
+	 * Model code that is used to read CSV files.
+	 */
 	private int modelCode;
 
-	private ERouterModels(int modelType) {
+	/**
+	 * List of supported routers.
+	 * 
+	 * @param modelType
+	 *            The model code, defined manually.
+	 */
+	private ERouterModels(final int modelType) {
 		this.modelCode = modelType;
 	}
 
 	/**
-	 * Map that will be used when looking up modelcode indexes
+	 * Map that will be used when looking up modelcode indexes.
 	 */
-	private static final Map<Integer, ERouterModels> lookup = new HashMap<Integer, ERouterModels>();
+	private static HashMap<Integer, ERouterModels> lookUp = new HashMap<>();
 	/**
 	 * Creates the map with the previously set values
 	 */
 	static {
 		for (ERouterModels emodel : EnumSet.allOf(ERouterModels.class)) {
-			lookup.put(emodel.getCode(), emodel);
+			lookUp.put(emodel.getCode(), emodel);
 		}
 	}
 
 	/**
-	 * Gets the model code for the choosen type
+	 * Gets the model code for the choosen type.
+	 * 
 	 * @return The model code.
 	 */
 	public int getCode() {
@@ -43,23 +52,23 @@ public enum ERouterModels {
 
 	/**
 	 * Looks up the model code in the available types.
-	 * @param code The code to be looked up.
+	 * 
+	 * @param code
+	 *            The code to be looked up.
 	 * @return The type that has been found.
 	 */
-	public static ERouterModels get(int code) {
-		return lookup.get(code);
+	public static ERouterModels get(final int code) {
+		return lookUp.get(code);
 	}
 
 	/**
 	 * Creates a new downloader object based on the enums types.
 	 * 
-	 * @param type
-	 *            The router type that will be returned.
 	 * @param router
 	 *            The default router that will be used on the downloader.
 	 * @return The downloader that will be later used to save the firmware.
 	 */
-	public static DefaultRouterWebDownloader returnDownloader(Router router) {
+	public static BaseRouterDownloader returnDownloader(final Router router) {
 		switch (router.getRouterModel()) {
 		case VIGOR_2910:
 			return new Vigor2910(router);

@@ -13,9 +13,16 @@ import au.com.bytecode.opencsv.CSVReader;
 /**
  * Loads router data from a CSV file.
  */
-public class LoadFromCSV {
+public final class LoadFromCSV {
+	/**
+	 * Router list that will be built as we read the CSV file.
+	 */
 	private static List<Router> routerList = new ArrayList<>();
+	/**
+	 * The default csv filename we will try to read the data from.
+	 */
 	private static final String DEFAULT_CSV_FILENAME = "routers.csv";
+
 	/**
 	 * Loads the routers from a CSV file.
 	 * 
@@ -23,69 +30,73 @@ public class LoadFromCSV {
 	 */
 	public static List<Router> loadCsv() {
 		CSVReader csvReader;
-		List<String[]> entries = null;		
+		List<String[]> entries = null;
 		try {
-			FileReader csvFile = new FileReader(LoadConfigFile.ROUTER_LIST_FILE);
-			csvReader = new CSVReader(csvFile, LoadConfigFile.CSV_FILE_SEPARATOR);
+			FileReader file = new FileReader(LoadConfigFile.ROUTER_LIST_FILE);
+			csvReader = new CSVReader(file, LoadConfigFile.CSV_FILE_SEPARATOR);
 			entries = csvReader.readAll();
 			csvReader.close();
 		} catch (Exception e) {
 			e.printStackTrace();
-			System.out.println("Router CSV list not found. Creating a default one...");
+			System.out.println("Router CSV list not found. "
+					+ "Creating a default one...");
 			createDefaultCsvFile();
-			
+
 		}
-			
 
-			for (String[] line : entries) {
-				Router router = new Router();
-				// Ignore the first line if it's the csv header
-				if (line[ECsvItens.MODEL_CODE.getIndex()]
-						.equalsIgnoreCase(ECsvItens.MODEL_CODE.getName())) {
-					continue;
-				} else if (line[ECsvItens.MODEL_CODE.getIndex()]
-						.equalsIgnoreCase("")) {
-					continue;
-				}
-
-				int modelCode = Integer.parseInt(line[ECsvItens.MODEL_CODE
-						.getIndex()]);
-				// Skip lines with wrong model coded
-				if (modelCode < 0 || modelCode >= ERouterModels.values().length) {
-					continue;
-				} else {
-					router.setRouterModel(ERouterModels.get(modelCode));
-				}
-
-				router.setSiteName(line[ECsvItens.SITE_NAME.getIndex()]);
-				router.setDescription(line[ECsvItens.DESCRIPTION.getIndex()]);
-				router.setUsername(line[ECsvItens.USER_NAME.getIndex()]);
-				router.setPassword(line[ECsvItens.PASSWORD.getIndex()]);
-				List<Address> addressList = new ArrayList<>();
-				int index = ECsvItens.MAIN_ADDRESS.getIndex();
-				do {
-					Address address = new Address();
-					try {
-						// Ignore malformed addresses or excel csv format quirks
-						address.setAddress(new URL(line[index]));
-						addressList.add(address);
-					} catch (Exception e) {
-						// TODO: Log malformed address problem
-					}
-					index++;
-
-				} while (line.length > index);
-				router.setConnectionAddresses(addressList);
-				routerList.add(router);
-				router = null;
+		for (String[] line : entries) {
+			Router router = new Router();
+			// Ignore the first line if it's the csv header
+			if (line[ECsvItens.MODEL_CODE.getIndex()]
+					.equalsIgnoreCase(ECsvItens.MODEL_CODE.getName())) {
+				continue;
+			} else if (line[ECsvItens.MODEL_CODE.getIndex()]
+					.equalsIgnoreCase("")) {
+				continue;
 			}
 
-		
+			int modelCode = Integer.parseInt(line[ECsvItens.MODEL_CODE
+					.getIndex()]);
+			// Skip lines with wrong model coded
+			if (modelCode < 0 || modelCode >= ERouterModels.values().length) {
+				continue;
+			} else {
+				router.setRouterModel(ERouterModels.get(modelCode));
+			}
+
+			router.setSiteName(line[ECsvItens.SITE_NAME.getIndex()]);
+			router.setDescription(line[ECsvItens.DESCRIPTION.getIndex()]);
+			router.setUsername(line[ECsvItens.USER_NAME.getIndex()]);
+			router.setPassword(line[ECsvItens.PASSWORD.getIndex()]);
+			List<Address> addressList = new ArrayList<>();
+			int index = ECsvItens.MAIN_ADDRESS.getIndex();
+			do {
+				Address address = new Address();
+				try {
+					// Ignore malformed addresses or excel csv format quirks
+					address.setAddress(new URL(line[index]));
+					addressList.add(address);
+				} catch (Exception e) {
+					if (LoadConfigFile.IS_SMTP_DEBUG_ON) {
+						System.out.println("Invalid address in CSV:"
+								+ line[index] + "\n");
+					}
+				}
+				index++;
+
+			} while (line.length > index);
+			router.setConnectionAddresses(addressList);
+			routerList.add(router);
+			router = null;
+		}
 
 		return routerList;
 	}
-	
-	
+
+	/**
+	 * Creates a default CSV file that can be customized by the user. It has
+	 * only the header line.
+	 */
 	private static void createDefaultCsvFile() {
 		StringBuilder sampleData = new StringBuilder();
 		for (int i = 0; i < ECsvItens.values().length; i++) {
@@ -114,7 +125,7 @@ public class LoadFromCSV {
 	 */
 	private enum ECsvItens {
 		/**
-		 * The model code, as indexed on {@link ERouterModels}
+		 * The model code, as indexed on {@link ERouterModels}.
 		 */
 		MODEL_CODE(0, "modelCode"),
 		/**
@@ -140,21 +151,52 @@ public class LoadFromCSV {
 		 */
 		MAIN_ADDRESS(5, "mainAddress");
 
+		/**
+		 * The index of the CSV column.
+		 */
 		private int index;
+		/**
+		 * The CSV column name.
+		 */
 		private String name;
 
-		private ECsvItens(int index, String name) {
-			this.index = index;
-			this.name = name;
+		/**
+		 * Enum constructor.
+		 * 
+		 * @param indx
+		 *            CSV File index.
+		 * @param nme
+		 *            CSV column name.
+		 */
+		private ECsvItens(final int indx, final String nme) {
+			this.index = indx;
+			this.name = nme;
 		}
 
+		/**
+		 * Gets the columns name from this enum.
+		 * 
+		 * @return Column name.
+		 */
 		public String getName() {
 			return name;
 		}
 
+		/**
+		 * Gets the CSV column index.
+		 * 
+		 * @return The CSV column index.
+		 */
 		public int getIndex() {
 			return index;
 		}
 
 	};
+
+	/**
+	 * This class should not be instantiated.
+	 */
+	private LoadFromCSV() {
+		// Not used
+	}
 }

@@ -16,12 +16,12 @@ import com.github.sardine.SardineFactory;
 
 public class WebDavClient {
 	private static Sardine sardineClient;
-	private static List<DefaultRouterWebDownloader> downloadersList;
+	private static List<BaseRouterDownloader> downloadersList;
 	private static String webDavURL;
 	private static final int WEBDAV_MAX_LIST_DEPTH = 1;
 
 	public static void saveFilesToWebDav(
-			List<DefaultRouterWebDownloader> routersDownloaders) {
+			List<BaseRouterDownloader> routersDownloaders) {
 		webDavURL = LoadConfigFile.WEBDAV_ADDRESS;
 		sardineClient = SardineFactory.begin(LoadConfigFile.WEBDAV_USERNAME,
 				LoadConfigFile.WEBDAV_PASSWORD);
@@ -46,7 +46,7 @@ public class WebDavClient {
 	 * @throws IOException
 	 */
 	private static void saveNewFiles() throws IOException {
-		for (DefaultRouterWebDownloader routerDownloader : downloadersList) {
+		for (BaseRouterDownloader routerDownloader : downloadersList) {
 			// Only bother saving backups that are ok
 			if (!routerDownloader.isBackupOK())
 				continue;
