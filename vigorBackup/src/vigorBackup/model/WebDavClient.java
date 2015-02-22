@@ -14,14 +14,39 @@ import com.github.sardine.DavResource;
 import com.github.sardine.Sardine;
 import com.github.sardine.SardineFactory;
 
-public class WebDavClient {
+/**
+ * Client for saving files in a WebDav server.
+ *
+ */
+public final class WebDavClient {
+	/**
+	 * Sardine webdav client.
+	 */
 	private static Sardine sardineClient;
-	private static List<BaseRouterDownloader> downloadersList;
+	/**
+	 * This is a list of the downloaders. It's used to get the files that need
+	 * to be saved.
+	 */
+	private static List<BaseDownloader> downloadersList;
+	/**
+	 * The webdav url, as loaded from the config file.
+	 */
 	private static String webDavURL;
+	/**
+	 * When listing files we don't want the search to go deeper than one level.
+	 * This is a security measure to avoid problems if the user specifies a
+	 * wrong webdav address.
+	 */
 	private static final int WEBDAV_MAX_LIST_DEPTH = 1;
 
+	/**
+	 * Save all files that the downloaders got to a webdav server.
+	 * 
+	 * @param routersDownloaders
+	 *            The downloader list.
+	 */
 	public static void saveFilesToWebDav(
-			List<BaseRouterDownloader> routersDownloaders) {
+			final List<BaseDownloader> routersDownloaders) {
 		webDavURL = LoadConfigFile.WEBDAV_ADDRESS;
 		sardineClient = SardineFactory.begin(LoadConfigFile.WEBDAV_USERNAME,
 				LoadConfigFile.WEBDAV_PASSWORD);
@@ -30,8 +55,8 @@ public class WebDavClient {
 			saveNewFiles();
 		} catch (IOException e) {
 			if (!LoadConfigFile.IS_SMTP_DEBUG_ON) {
-				System.out
-						.println("Could not save files to WebDav. Active debug mode in properties to know why");
+				System.out.println("Could not save files to WebDav. "
+						+ "Activate debug mode in " + "properties to know why");
 			} else {
 				e.printStackTrace();
 			}
@@ -44,22 +69,26 @@ public class WebDavClient {
 	 * {currentWebDavAddress/RouterSiteName/FileName}.
 	 * 
 	 * @throws IOException
+	 *             If a problem occurs.
 	 */
 	private static void saveNewFiles() throws IOException {
-		for (BaseRouterDownloader routerDownloader : downloadersList) {
+		for (BaseDownloader routerDownloader : downloadersList) {
 			// Only bother saving backups that are ok
-			if (!routerDownloader.isBackupOK())
+			if (!routerDownloader.isBackupOK()) {
 				continue;
+			}
 			StringBuilder sbDirname = new StringBuilder(routerDownloader
 					.getRouter().getSiteName());
 			// Checks if the directory name have the needed slashes.
-			if (!sbDirname.toString().endsWith("/"))
+			if (!sbDirname.toString().endsWith("/")) {
 				sbDirname.append("/");
+			}
 			String webdavBackupDir = webDavURL + sbDirname.toString();
 			String fileName = routerDownloader.getBackupFileName();
 
-			if (!sardineClient.exists(webdavBackupDir))
+			if (!sardineClient.exists(webdavBackupDir)) {
 				sardineClient.createDirectory(webdavBackupDir);
+			}
 
 			ByteArrayInputStream byis = new ByteArrayInputStream(
 					routerDownloader.getDownloadedBackup());
@@ -80,7 +109,7 @@ public class WebDavClient {
 	 * @throws IOException
 	 *             When a problem ocurrs.
 	 */
-	private static void deleteOldFiles(String webDavBackupDir)
+	private static void deleteOldFiles(final String webDavBackupDir)
 			throws IOException {
 		List<DavResource> filesList = sardineClient.list(webDavBackupDir,
 				WEBDAV_MAX_LIST_DEPTH);
@@ -88,7 +117,7 @@ public class WebDavClient {
 		LocalDateTime minusDate = LocalDateTime.now().minusDays(
 				LoadConfigFile.DAYS_TO_KEEP_FILES);
 		ZonedDateTime zdt = minusDate.atZone(ZoneId.systemDefault());
-		
+
 		// Apply a filter to make sure we only have backup files on it and all
 		// of them are older than the defined days to keep.
 		// then we sort the list based on the modification time.
@@ -101,20 +130,28 @@ public class WebDavClient {
 				.sorted(new Comparator<DavResource>() {
 
 					@Override
-					public int compare(DavResource o1, DavResource o2) {
+					public int compare(final DavResource o1,
+							final DavResource o2) {
 
 						return o1.getModified().compareTo(o2.getModified());
 					}
 				}).collect(Collectors.toList());
 
-		if (!configFilesList.isEmpty()) {			
-			while(configFilesList.size() > LoadConfigFile.DAYS_TO_KEEP_FILES){
-				sardineClient.delete(configFilesList.get(0).getHref().toString());
+		if (!configFilesList.isEmpty()) {
+			while (configFilesList.size() > LoadConfigFile.DAYS_TO_KEEP_FILES) {
+				sardineClient.delete(configFilesList.get(0).getHref()
+						.toString());
 				configFilesList.remove(0);
 			}
-			//delete the oldest file that is below the limit DAYS_TO_KEEP_FILES
+			// delete the oldest file that is below the limit DAYS_TO_KEEP_FILES
 			sardineClient.delete(configFilesList.get(0).getHref().toString());
 		}
 	}
 
+	/**
+	 * This class should not be instantiated.
+	 */
+	private WebDavClient() {
+		// nt used
+	}
 }

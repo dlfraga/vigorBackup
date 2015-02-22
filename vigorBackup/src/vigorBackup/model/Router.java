@@ -117,6 +117,14 @@ public class Router {
 	public final Long getId() {
 		return id;
 	}
+	
+	/**
+	 * Sets the router id.
+	 * @param routerId The id.
+	 */
+	public final void setId(final long routerId) {
+		this.id = routerId;
+	}
 
 	/**
 	 * Gets a list of all connection addresses.

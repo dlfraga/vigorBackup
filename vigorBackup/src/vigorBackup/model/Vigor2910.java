@@ -12,7 +12,7 @@ import java.util.Base64;
  * @author Daniel
  */
 
-public class Vigor2910 extends BaseRouterDownloader {
+public class Vigor2910 extends BaseDownloader {
 	/**
 	 * Vigor 2910.
 	 * @param routr The router.

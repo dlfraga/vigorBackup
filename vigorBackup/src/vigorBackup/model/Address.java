@@ -58,6 +58,14 @@ public class Address {
 	}
 
 	/**
+	 * Sets this address id.
+	 * @param addrId The address id.
+	 */
+	public final void setId(final Long addrId) {
+		this.id = addrId;
+	}
+	
+	/**
 	 * Gets the address id.
 	 * @return The id.
 	 */

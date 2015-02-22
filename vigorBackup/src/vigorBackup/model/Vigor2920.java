@@ -6,16 +6,35 @@ import java.io.InputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
 
-public class Vigor2920 extends BaseRouterDownloader {
-	private String cookie;
-	private HttpURLConnection connection;
-	private final static String FILE_DOWNLOAD_STRING = "/V2920_temp.cfg";
+/**
+ * This class implements the backup routines specific to Vigor2920 routers.
+ * 
+ * @see BaseDownloader
+ */
+public class Vigor2920 extends BaseDownloader {
+	/**
+	 * The connection.
+	 */
+	private HttpURLConnection conn;
+	/**
+	 * Temporary string thats used to download the firmware data.
+	 */
+	private static final String FILE_DOWNLOAD_STRING = "/V2920_temp.cfg";
+	/**
+	 * User agent to be passed to the connection.
+	 */
+	private static final String USER_AGENT = "Mozilla/5.0 "
+			+ "(Windows NT 6.1; WOW64; rv:16.0) Gecko/20100101 Firefox/16.0";
 
-	public Vigor2920(Router router) {
+	/**
+	 * Creates a new downloader.
+	 * 
+	 * @param router The router that will have it's firmware downloaded.
+	 */
+	public Vigor2920(final Router router) {
 		super(router);
-		
 	}
-	
+
 	/**
 	 * Downloads a backup file by authenticating to wlogin.cgi using a POST. The
 	 * user and password are first base64'ed and then sent. The retrieved cookie
@@ -23,55 +42,52 @@ public class Vigor2920 extends BaseRouterDownloader {
 	 * file.
 	 */
 	@Override
-	public boolean downloadBackupFromUrl(Address address) {
+	public final boolean downloadBackupFromUrl(final Address address) {
 		boolean isDownloadOk = false;
 		try {
-
+			//Connects to the router and authenticates.
 			String request = address.getAddress().toString();
 			// url used to authenticate
 			request += "/cgi-bin/wlogin.cgi";
+			//This router uses some special parameters to authenticate
 			String urlParameters = "aa="
 					+ getRouter().getBase64EncodedUsername() + "&ab="
 					+ getRouter().getBase64EncodedPassword();
 			// + "&sslgroup=-1&obj3=&obj4=&obj5=&obj6=&obj7=";
 
 			URL url = new URL(request);
-			connection = (HttpURLConnection) url.openConnection();
-			connection.setDoOutput(true);
-			connection.setDoInput(true);
-			connection.setInstanceFollowRedirects(false);
-			connection.setRequestMethod("POST");
-			connection
-					.setRequestProperty("User-Agent",
-							"Mozilla/5.0 (Windows NT 6.1; WOW64; rv:16.0) Gecko/20100101 Firefox/16.0");
-			connection.setRequestProperty("Content-Type",
+			conn = (HttpURLConnection) url.openConnection();
+			conn.setDoOutput(true);
+			conn.setDoInput(true);
+			conn.setInstanceFollowRedirects(false);
+			conn.setRequestMethod("POST");
+			conn.setRequestProperty("User-Agent", USER_AGENT);
+			conn.setRequestProperty("Content-Type",
 					"application/x-www-form-urlencoded");
-			connection.setRequestProperty("charset", "utf-8");
-			connection.setRequestProperty("Content-Length",
+			conn.setRequestProperty("charset", "utf-8");
+			conn.setRequestProperty("Content-Length",
 					"" + Integer.toString(urlParameters.getBytes().length));
-			connection.setUseCaches(false);
+			conn.setUseCaches(false);
 
 			DataOutputStream wr = new DataOutputStream(
-					connection.getOutputStream());
+					conn.getOutputStream());
 			wr.writeBytes(urlParameters);
 			wr.flush();
 			wr.close();
-			String cookie = connection.getHeaderFields().get("Set-Cookie")
-					.get(0);
+			String cookie = conn.getHeaderFields().get("Set-Cookie").get(0);
 
-			connection.disconnect();
+			conn.disconnect();
 
+			//Uses the session cookie to download the firmware file. 
 			URL downloadUrl = new URL(address.getAddress().toString()
 					+ FILE_DOWNLOAD_STRING);
-			connection = (HttpURLConnection) downloadUrl.openConnection();
-			connection.setRequestMethod("GET");
-			connection.setRequestProperty("Cookie", cookie);
-			connection
-					.setRequestProperty("User-Agent",
-							"Mozilla/5.0 (Windows NT 6.1; WOW64; rv:16.0) Gecko/20100101 Firefox/16.0");
+			conn = (HttpURLConnection) downloadUrl.openConnection();
+			conn.setRequestMethod("GET");
+			conn.setRequestProperty("Cookie", cookie);
+			conn.setRequestProperty("User-Agent", USER_AGENT);
 
-			int contentLength = connection.getContentLength();
-			InputStream raw = connection.getInputStream();
+			int contentLength = conn.getContentLength();
+			InputStream raw = conn.getInputStream();
 			InputStream in = new BufferedInputStream(raw);
 			byte[] data = new byte[contentLength];
 			int bytesRead = 0;
@@ -88,7 +104,7 @@ public class Vigor2920 extends BaseRouterDownloader {
 			if (offset != contentLength) {
 				isDownloadOk = false;
 			}
-			setDownloadedBackup(data);			
+			setDownloadedBackup(data);
 			isDownloadOk = true;
 
 		} catch (Exception e) {
@@ -97,14 +113,6 @@ public class Vigor2920 extends BaseRouterDownloader {
 
 		return isDownloadOk;
 
-	}
-
-	public String getCookies() {
-		return cookie;
-	}
-
-	public void setCookies(String cookies) {
-		this.cookie = cookies;
 	}
 
 }

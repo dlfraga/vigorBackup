@@ -68,7 +68,7 @@ public enum ERouterModels {
 	 *            The default router that will be used on the downloader.
 	 * @return The downloader that will be later used to save the firmware.
 	 */
-	public static BaseRouterDownloader returnDownloader(final Router router) {
+	public static BaseDownloader returnDownloader(final Router router) {
 		switch (router.getRouterModel()) {
 		case VIGOR_2910:
 			return new Vigor2910(router);

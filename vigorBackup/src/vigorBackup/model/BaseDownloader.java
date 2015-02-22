@@ -8,7 +8,7 @@ import java.util.Date;
  * Defines a Default Router Downloader that the concrete routers should inherit
  * and the methods that must be overridden.
  */
-public abstract class BaseRouterDownloader extends Thread {
+public abstract class BaseDownloader extends Thread {
 
 	/**
 	 * The router that will have its firmware downloaded.
@@ -71,7 +71,7 @@ public abstract class BaseRouterDownloader extends Thread {
 	 * @param routr
 	 *            The router object that needs to have it's backup downloaded
 	 */
-	public BaseRouterDownloader(final Router routr) {
+	public BaseDownloader(final Router routr) {
 		this.router = routr;
 	}
 
@@ -98,6 +98,7 @@ public abstract class BaseRouterDownloader extends Thread {
 	}
 
 	/**
+	 * Gets the download backup as a byte array.
 	 * @param downloadedBackp
 	 *            the downloadedBackup to set
 	 */

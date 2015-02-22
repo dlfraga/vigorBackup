@@ -23,9 +23,9 @@ public final class FileSystemClient {
 	 *            The list of downloaders to have their backups saved.
 	 */
 	public static void saveToFileSystem(
-			final List<BaseRouterDownloader> downloaderList) {
+			final List<BaseDownloader> downloaderList) {
 
-		for (BaseRouterDownloader downloader : downloaderList) {
+		for (BaseDownloader downloader : downloaderList) {
 			if (downloader.isBackupOK()) {
 				saveDataToFile(downloader);
 			}
@@ -39,7 +39,7 @@ public final class FileSystemClient {
 	 * @param downloader
 	 *            The downloader that we will get the backup file from.
 	 */
-	private static void saveDataToFile(final BaseRouterDownloader downloader) {
+	private static void saveDataToFile(final BaseDownloader downloader) {
 		String directory = LoadConfigFile.ROOT_DIRECTORY
 				+ downloader.getRouter().getSiteName();
 		try {

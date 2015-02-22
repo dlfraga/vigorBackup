@@ -16,13 +16,23 @@ import javax.net.ssl.X509TrustManager;
 /**
  * This class implements the backup routines specific to Vigor2925 routers.
  * 
- * @see BaseRouterDownloader
+ * @see BaseDownloader
  */
-public class Vigor2925 extends BaseRouterDownloader {
-	private String cookie;
-	private HttpURLConnection connection;
-	private final static String FILE_DOWNLOAD_STRING = "/V2925_temp.cfg";
+public class Vigor2925 extends BaseDownloader {
+	/**
+	 * The connection.
+	 */
+	private HttpURLConnection httpConn;
+	/**
+	 * String that will be used in the url path to download the firmware.
+	 */
+	private static final String FILE_DOWNLOAD_STRING = "/V2925_temp.cfg";
 
+	/**
+	 * Creates a new downloader.
+	 * 
+	 * @param router The router that will have it's firmware downloader.
+	 */
 	public Vigor2925(final Router router) {
 		super(router);
 	}
@@ -34,7 +44,7 @@ public class Vigor2925 extends BaseRouterDownloader {
 	 * file.
 	 */
 	@Override
-	public boolean downloadBackupFromUrl(Address address) {
+	public final boolean downloadBackupFromUrl(final Address address) {
 		boolean isDownloadOk = false;
 		try {
 
@@ -47,51 +57,50 @@ public class Vigor2925 extends BaseRouterDownloader {
 			// + "&sslgroup=-1&obj3=&obj4=&obj5=&obj6=&obj7=";
 
 			URL url = new URL(request);
-			connection = (HttpURLConnection) url.openConnection();
+			httpConn = (HttpURLConnection) url.openConnection();
 			disableSSLChecks();
-			connection.setDoOutput(true);
-			connection.setDoInput(true);
-			connection.setInstanceFollowRedirects(false);
-			connection.setRequestMethod("POST");
-			connection
-					.setRequestProperty("User-Agent",
-							"Mozilla/5.0 (Windows NT 6.1; WOW64; rv:16.0) Gecko/20100101 Firefox/16.0");
-			connection.setRequestProperty("Content-Type",
+			httpConn.setDoOutput(true);
+			httpConn.setDoInput(true);
+			httpConn.setInstanceFollowRedirects(false);
+			httpConn.setRequestMethod("POST");
+			httpConn.setRequestProperty("User-Agent",
+					"Mozilla/5.0 (Windows NT 6.1; WOW64; rv:16.0) "
+					+ "Gecko/20100101 Firefox/16.0");
+			httpConn.setRequestProperty("Content-Type",
 					"application/x-www-form-urlencoded");
-			connection.setRequestProperty("charset", "utf-8");
-			connection.setRequestProperty("Content-Length",
+			httpConn.setRequestProperty("charset", "utf-8");
+			httpConn.setRequestProperty("Content-Length",
 					"" + Integer.toString(urlParameters.getBytes().length));
-			connection.setUseCaches(false);
+			httpConn.setUseCaches(false);
 
 			DataOutputStream wr = new DataOutputStream(
-					connection.getOutputStream());
+					httpConn.getOutputStream());
 			wr.writeBytes(urlParameters);
 			wr.flush();
 			wr.close();
-			String cookie = connection.getHeaderFields().get("Set-Cookie")
-					.get(0);
+			String cookie = httpConn.getHeaderFields().get("Set-Cookie").get(0);
 
-			connection.disconnect();
+			httpConn.disconnect();
 
 			URL downloadUrl = new URL(address.getAddress().toString()
 					+ FILE_DOWNLOAD_STRING);
-			connection = (HttpURLConnection) downloadUrl.openConnection();
-			connection.setRequestMethod("GET");
-			connection.setRequestProperty("Cookie", cookie);
-			connection
-					.setRequestProperty("User-Agent",
-							"Mozilla/5.0 (Windows NT 6.1; WOW64; rv:16.0) Gecko/20100101 Firefox/16.0");
+			httpConn = (HttpURLConnection) downloadUrl.openConnection();
+			httpConn.setRequestMethod("GET");
+			httpConn.setRequestProperty("Cookie", cookie);
+			httpConn.setRequestProperty("User-Agent",
+					"Mozilla/5.0 (Windows NT 6.1; WOW64; rv:16.0) Gecko/20100101 Firefox/16.0");
 
-			int contentLength = connection.getContentLength();
-			InputStream raw = connection.getInputStream();
+			int contentLength = httpConn.getContentLength();
+			InputStream raw = httpConn.getInputStream();
 			InputStream in = new BufferedInputStream(raw);
 			byte[] data = new byte[contentLength];
 			int bytesRead = 0;
 			int offset = 0;
 			while (offset < contentLength) {
 				bytesRead = in.read(data, offset, data.length - offset);
-				if (bytesRead == -1)
+				if (bytesRead == -1) {
 					break;
+				}
 				offset += bytesRead;
 			}
 			in.close();
@@ -104,19 +113,11 @@ public class Vigor2925 extends BaseRouterDownloader {
 
 		} catch (Exception e) {
 			isDownloadOk = false;
-			//e.printStackTrace();
+			// e.printStackTrace();
 		}
 
 		return isDownloadOk;
 
-	}
-
-	public String getCookies() {
-		return cookie;
-	}
-
-	public void setCookies(String cookies) {
-		this.cookie = cookies;
 	}
 
 	static {

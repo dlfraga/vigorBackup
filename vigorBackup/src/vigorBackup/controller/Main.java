@@ -6,7 +6,7 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
 
-import vigorBackup.model.BaseRouterDownloader;
+import vigorBackup.model.BaseDownloader;
 import vigorBackup.model.ERouterModels;
 import vigorBackup.model.EmailBackupReport;
 import vigorBackup.model.FileSystemClient;
@@ -18,11 +18,18 @@ import vigorBackup.model.WebDavClient;
 /**
  * Main class. It starts the backup routines.
  */
-public class Main {
+public final class Main {
 	/**
-	 * List of the downloaders for the routers
+	 * Time to wait for the threads to finish.
 	 */
-	private static List<BaseRouterDownloader> routersDownloaders = new ArrayList<>();
+	private static final int THREAD_TIMEOUT = 10;
+	/**
+	 * List of the downloaders for the routers.
+	 */
+	private static List<BaseDownloader> routersDownloaders = new ArrayList<>();
+	/**
+	 * The router list.
+	 */
 	private static List<Router> routerList = new ArrayList<>();
 
 	/**
@@ -32,7 +39,7 @@ public class Main {
 	 *            The first argument must be the config file path. Other args
 	 *            are ignored.
 	 */
-	public static void main(String[] args) {
+	public static void main(final String[] args) {
 		LoadConfigFile.loadConfigFile(args);
 		routerList = LoadFromCSV.loadCsv();
 		backupFiles();
@@ -59,7 +66,7 @@ public class Main {
 		execServ.shutdown();
 		try {
 			System.out.println("Waiting 10 minutes for all threads to finish");
-			if (execServ.awaitTermination(10, TimeUnit.MINUTES)) {
+			if (execServ.awaitTermination(THREAD_TIMEOUT, TimeUnit.MINUTES)) {
 				System.out.println("All threads finished sucessfully");
 			} else {
 				System.out.println("Some threads were killed by timeout");
@@ -70,4 +77,10 @@ public class Main {
 		}
 	}
 
+	/**
+	 * Main class.
+	 */
+	private Main() {
+		
+	}
 }

@@ -36,12 +36,10 @@ public final class LoadFromCSV {
 			csvReader = new CSVReader(file, LoadConfigFile.CSV_FILE_SEPARATOR);
 			entries = csvReader.readAll();
 			csvReader.close();
-		} catch (Exception e) {
-			e.printStackTrace();
+		} catch (IOException e) {
 			System.out.println("Router CSV list not found. "
 					+ "Creating a default one...");
 			createDefaultCsvFile();
-
 		}
 
 		for (String[] line : entries) {
