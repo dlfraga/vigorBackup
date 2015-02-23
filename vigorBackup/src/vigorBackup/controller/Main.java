@@ -73,6 +73,7 @@ public final class Main {
 			}
 		} catch (InterruptedException e) {
 			// TODO Treat exceptions
+			// XXX LOL
 			e.printStackTrace();
 		}
 	}

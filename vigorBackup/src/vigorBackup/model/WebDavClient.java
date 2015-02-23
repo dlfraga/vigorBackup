@@ -138,11 +138,13 @@ public final class WebDavClient {
 				}).collect(Collectors.toList());
 
 		if (!configFilesList.isEmpty()) {
+			//FIXME: ConfigFilesList will never have more than DAYS_TO_KEEP
 			while (configFilesList.size() > LoadConfigFile.DAYS_TO_KEEP_FILES) {
 				sardineClient.delete(configFilesList.get(0).getHref()
 						.toString());
-				configFilesList.remove(0);
+				
 			}
+			configFilesList.remove(0);
 			// delete the oldest file that is below the limit DAYS_TO_KEEP_FILES
 			sardineClient.delete(configFilesList.get(0).getHref().toString());
 		}
