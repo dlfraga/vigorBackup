@@ -47,14 +47,17 @@ public final class WebDavClient {
 	 */
 	public static void saveFilesToWebDav(
 			final List<BaseDownloader> routersDownloaders) {
-		webDavURL = LoadConfigFile.WEBDAV_ADDRESS;
-		sardineClient = SardineFactory.begin(LoadConfigFile.WEBDAV_USERNAME,
-				LoadConfigFile.WEBDAV_PASSWORD);
+		webDavURL = (String) Configs.getConfig(EConfigs.WEBDAV_ADDRESS);
+		String wbUser = (String) Configs
+				.getConfig(EConfigs.WEBDAV_USERNAME);
+		String wbPass = (String) Configs
+				.getConfig(EConfigs.WEBDAV_PASSWORD);
+		sardineClient = SardineFactory.begin(wbUser, wbPass);
 		downloadersList = routersDownloaders;
 		try {
 			saveNewFiles();
 		} catch (IOException e) {
-			if (!LoadConfigFile.IS_SMTP_DEBUG_ON) {
+			if (!(boolean) Configs.getConfig(EConfigs.IS_DEBUG_ON)) {
 				System.out.println("Could not save files to WebDav. "
 						+ "Activate debug mode in " + "properties to know why");
 			} else {
@@ -111,11 +114,12 @@ public final class WebDavClient {
 	 */
 	private static void deleteOldFiles(final String webDavBackupDir)
 			throws IOException {
+		int daysToKeepFiles = (int) Configs.getConfig(EConfigs.DAYS_TO_KEEP);
 		List<DavResource> filesList = sardineClient.list(webDavBackupDir,
 				WEBDAV_MAX_LIST_DEPTH);
 		// We use the localDateTime in java8
 		LocalDateTime minusDate = LocalDateTime.now().minusDays(
-				LoadConfigFile.DAYS_TO_KEEP_FILES);
+				daysToKeepFiles);
 		ZonedDateTime zdt = minusDate.atZone(ZoneId.systemDefault());
 
 		// Apply a filter to make sure we only have backup files on it and all
@@ -138,14 +142,14 @@ public final class WebDavClient {
 				}).collect(Collectors.toList());
 
 		if (!configFilesList.isEmpty()) {
-			//FIXME: ConfigFilesList will never have more than DAYS_TO_KEEP
-			while (configFilesList.size() > LoadConfigFile.DAYS_TO_KEEP_FILES) {
+			// FIXME: ConfigFilesList will never have more than DAYS_TO_KEEP
+			while (configFilesList.size() > daysToKeepFiles) {
 				sardineClient.delete(configFilesList.get(0).getHref()
 						.toString());
-				
+
 			}
 			configFilesList.remove(0);
-			// delete the oldest file that is below the limit DAYS_TO_KEEP_FILES
+			// delete the oldest file that is below the limit DAYS_TO_KEEP
 			sardineClient.delete(configFilesList.get(0).getHref().toString());
 		}
 	}

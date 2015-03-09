@@ -32,8 +32,12 @@ public final class LoadFromCSV {
 		CSVReader csvReader;
 		List<String[]> entries = null;
 		try {
-			FileReader file = new FileReader(LoadConfigFile.ROUTER_LIST_FILE);
-			csvReader = new CSVReader(file, LoadConfigFile.CSV_FILE_SEPARATOR);
+			String fleName = (String) Configs
+					.getConfig(EConfigs.ROUTER_LIST_FILE);
+			char csvSeparator = (char) Configs
+					.getConfig(EConfigs.CSV_FILE_SEPARATOR);
+			FileReader file = new FileReader(fleName);
+			csvReader = new CSVReader(file, csvSeparator);
 			entries = csvReader.readAll();
 			csvReader.close();
 		} catch (IOException e) {
@@ -41,7 +45,10 @@ public final class LoadFromCSV {
 					+ "Creating a default one...");
 			createDefaultCsvFile();
 		}
-
+		if (entries.isEmpty()) {
+			System.out.println("No routers found");
+			System.exit(1);
+		}
 		for (String[] line : entries) {
 			Router router = new Router();
 			// Ignore the first line if it's the csv header
@@ -75,7 +82,8 @@ public final class LoadFromCSV {
 					address.setAddress(new URL(line[index]));
 					addressList.add(address);
 				} catch (Exception e) {
-					if (LoadConfigFile.IS_SMTP_DEBUG_ON) {
+					if ((boolean) Configs
+							.getConfig(EConfigs.IS_DEBUG_ON)) {
 						System.out.println("Invalid address in CSV:"
 								+ line[index] + "\n");
 					}
@@ -87,7 +95,6 @@ public final class LoadFromCSV {
 			routerList.add(router);
 			router = null;
 		}
-
 		return routerList;
 	}
 

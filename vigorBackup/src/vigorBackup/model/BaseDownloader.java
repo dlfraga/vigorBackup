@@ -6,7 +6,7 @@ import java.util.Date;
 
 /**
  * Defines a Default Router Downloader that the concrete routers should inherit
- * and the methods that must be overridden.
+ * and the methods that must be overridden. 
  */
 public abstract class BaseDownloader extends Thread {
 
@@ -59,7 +59,7 @@ public abstract class BaseDownloader extends Thread {
 	}
 
 	/**
-	 * Downloads a file from a specific address.
+	 * Downloads a file from a specific address. This method must be overridden.
 	 * 
 	 * @param address
 	 *            The address that will be used to download the file

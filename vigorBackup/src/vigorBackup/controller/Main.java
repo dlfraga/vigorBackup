@@ -10,7 +10,7 @@ import vigorBackup.model.BaseDownloader;
 import vigorBackup.model.ERouterModels;
 import vigorBackup.model.EmailBackupReport;
 import vigorBackup.model.FileSystemClient;
-import vigorBackup.model.LoadConfigFile;
+import vigorBackup.model.Configs;
 import vigorBackup.model.LoadFromCSV;
 import vigorBackup.model.Router;
 import vigorBackup.model.WebDavClient;
@@ -40,7 +40,7 @@ public final class Main {
 	 *            are ignored.
 	 */
 	public static void main(final String[] args) {
-		LoadConfigFile.loadConfigFile(args);
+		Configs.loadConfigFile(args);
 		routerList = LoadFromCSV.loadCsv();
 		backupFiles();
 		WebDavClient.saveFilesToWebDav(routersDownloaders);

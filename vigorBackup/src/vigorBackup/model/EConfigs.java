@@ -12,7 +12,7 @@ public enum EConfigs {
 	/**
 	 * Days to keep old backup files.
 	 */
-	DAYS_TO_KEEP_FILES("days.to.keep.backups", "30"),
+	DAYS_TO_KEEP("days.to.keep.backups", "30"),
 	/**
 	 * The routers CSV file. It will be read on runtime.
 	 * 
@@ -28,10 +28,10 @@ public enum EConfigs {
 	 */
 	IS_SMTP_AUTH_NEEDED("mail.smtp.auth", "true"),
 	/**
-	 * Checks if the smtp connection is on debug mode. If it is debug data will
-	 * be shown on the sysout.
+	 * Checks if the program is in debug mode where some stacktraces will be
+	 * shown.
 	 */
-	IS_SMTP_DEBUG_ON("mail.smtp.debug", "true"),
+	IS_DEBUG_ON("debug.mode", "true"),
 	/**
 	 * Checks if we need to enable SSL to send e-mail.
 	 */
@@ -101,7 +101,7 @@ public enum EConfigs {
 	 * 
 	 * @return An String with the config code.
 	 */
-	public String getConfigCode() {
+	public String getKey() {
 		return configKey;
 	}
 

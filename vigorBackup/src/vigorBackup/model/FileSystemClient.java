@@ -10,10 +10,16 @@ import java.time.ZonedDateTime;
 import java.util.Arrays;
 import java.util.Comparator;
 import java.util.List;
+
 /**
  * This class is responsible for saving of files to the FileSystem.
  */
 public final class FileSystemClient {
+	/**
+	 * Checks if the program is in debug mode.
+	 */
+	private static boolean isDebugOn = (boolean) Configs
+			.getConfig(EConfigs.IS_DEBUG_ON);
 
 	/**
 	 * Saves the files got by the downloaders to disk. Only downloaders that
@@ -40,15 +46,15 @@ public final class FileSystemClient {
 	 *            The downloader that we will get the backup file from.
 	 */
 	private static void saveDataToFile(final BaseDownloader downloader) {
-		String directory = LoadConfigFile.ROOT_DIRECTORY
-				+ downloader.getRouter().getSiteName();
+		String directory = (String) Configs
+				.getConfig(EConfigs.ROOT_DIRECTORY);
+		directory += downloader.getRouter().getSiteName();
 		try {
 			new File(directory).mkdirs();
 		} catch (Exception e) {
-			if (!LoadConfigFile.IS_SMTP_DEBUG_ON) {
-				System.out
-						.println("Error creating backup directory. "
-								+ "Activate debug for more info");
+			if (!isDebugOn) {
+				System.out.println("Error creating backup directory. "
+						+ "Activate debug for more info");
 			} else {
 				e.printStackTrace();
 			}
@@ -63,10 +69,9 @@ public final class FileSystemClient {
 			out.close();
 			cleanOldBackups(directory);
 		} catch (IOException e) {
-			if (!LoadConfigFile.IS_SMTP_DEBUG_ON) {
-				System.out
-						.println("Error saving files. "
-								+ "Activate debug for more info");
+			if (!isDebugOn) {
+				System.out.println("Error saving files. "
+						+ "Activate debug for more info");
 			} else {
 				e.printStackTrace();
 			}
@@ -84,7 +89,7 @@ public final class FileSystemClient {
 
 		File dir = new File(directory);
 		LocalDateTime minusDate = LocalDateTime.now().minusDays(
-				LoadConfigFile.DAYS_TO_KEEP_FILES);
+				(int) Configs.getConfig(EConfigs.DAYS_TO_KEEP));
 		ZonedDateTime zdt = minusDate.atZone(ZoneId.systemDefault());
 		// We use a file Filter to weed out the files or directories that we
 		// don't care about.
@@ -133,10 +138,11 @@ public final class FileSystemClient {
 			backups[0].delete();
 		}
 	}
+
 	/**
 	 * Private constructor. This class should not be instantiated.
 	 */
 	private FileSystemClient() {
-	
+
 	}
 }
