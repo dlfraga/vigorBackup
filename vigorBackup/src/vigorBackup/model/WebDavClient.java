@@ -48,10 +48,8 @@ public final class WebDavClient {
 	public static void saveFilesToWebDav(
 			final List<BaseDownloader> routersDownloaders) {
 		webDavURL = (String) Configs.getConfig(EConfigs.WEBDAV_ADDRESS);
-		String wbUser = (String) Configs
-				.getConfig(EConfigs.WEBDAV_USERNAME);
-		String wbPass = (String) Configs
-				.getConfig(EConfigs.WEBDAV_PASSWORD);
+		String wbUser = (String) Configs.getConfig(EConfigs.WEBDAV_USERNAME);
+		String wbPass = (String) Configs.getConfig(EConfigs.WEBDAV_PASSWORD);
 		sardineClient = SardineFactory.begin(wbUser, wbPass);
 		downloadersList = routersDownloaders;
 		try {
@@ -118,8 +116,8 @@ public final class WebDavClient {
 		List<DavResource> filesList = sardineClient.list(webDavBackupDir,
 				WEBDAV_MAX_LIST_DEPTH);
 		// We use the localDateTime in java8
-		LocalDateTime minusDate = LocalDateTime.now().minusDays(
-				daysToKeepFiles);
+		LocalDateTime minusDate = LocalDateTime.now()
+				.minusDays(daysToKeepFiles);
 		ZonedDateTime zdt = minusDate.atZone(ZoneId.systemDefault());
 
 		// Apply a filter to make sure we only have backup files on it and all
@@ -146,12 +144,15 @@ public final class WebDavClient {
 			while (configFilesList.size() > daysToKeepFiles) {
 				sardineClient.delete(configFilesList.get(0).getHref()
 						.toString());
-
+				configFilesList.remove(0);
 			}
-			configFilesList.remove(0);
-			// delete the oldest file that is below the limit DAYS_TO_KEEP
-			sardineClient.delete(configFilesList.get(0).getHref().toString());
-		}
+			if (!configFilesList.isEmpty()) {
+				// delete the oldest file that is below the limit DAYS_TO_KEEP
+				sardineClient.delete(configFilesList.get(0).getHref()
+						.toString());
+			}
+
+	}
 	}
 
 	/**
