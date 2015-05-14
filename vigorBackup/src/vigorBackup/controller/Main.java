@@ -51,6 +51,7 @@ public final class Main {
 	/**
 	 * Backup the firmware of the loaded router list. This method lauches all
 	 * backups simultaneously and waits for then to end before continuing.
+	 * DAS!
 	 */
 	private static void backupFiles() {
 		routersDownloaders = new ArrayList<>();
