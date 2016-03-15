@@ -103,8 +103,10 @@ public final class LoadFromCSV {
 	 * only the header line.
 	 */
 	private static void createDefaultCsvFile() {
+		
 		StringBuilder sampleData = new StringBuilder();
 		for (int i = 0; i < ECsvItens.values().length; i++) {
+			//TODO: use EConfigs.CSV_FILE_SEPARATOR instead of ;
 			sampleData.append(ECsvItens.values()[i].getName() + ";");
 		}
 		sampleData.append("\n");
