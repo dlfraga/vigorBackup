@@ -3,7 +3,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>vigorBackup</groupId>
 	<artifactId>vigorBackup</artifactId>
-	<version>0.0.1-SNAPSHOT</version>
+	<version>1</version>
 	<name>vigorBackup</name>
 	<description>Program to backup Draytek routers</description>
 

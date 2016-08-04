@@ -5,14 +5,14 @@ import java.util.HashMap;
 
 /**
  * This enum holds all router types to be used in the application. It is also
- * used as a factory.
+ * used as a factory to create the router objects.
  */
 public enum ERouterModels {
 	/**
 	 * The router types. The constructor values are used later in importing
 	 * data.
 	 */
-	VIGOR_2925(0), VIGOR_2910(1), VIGOR_3300(2), VIGOR_2920(3), VIGOR_3200(4);
+	VIGOR_2925(0), VIGOR_2910(1), VIGOR_3300(2), VIGOR_2920(3), VIGOR_3200(4), VIGOR_3220(5);
 	/**
 	 * Model code that is used to read CSV files.
 	 */
@@ -80,6 +80,8 @@ public enum ERouterModels {
 			return new Vigor3200(router);
 		case VIGOR_3300:
 			return new Vigor3300(router);
+		case VIGOR_3220:
+			return new Vigor3220(router);
 		default:
 			throw new IllegalArgumentException();
 		}

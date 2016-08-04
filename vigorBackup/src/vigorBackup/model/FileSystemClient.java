@@ -18,8 +18,7 @@ public final class FileSystemClient {
 	/**
 	 * Checks if the program is in debug mode.
 	 */
-	private static boolean isDebugOn = (boolean) Configs
-			.getConfig(EConfigs.IS_DEBUG_ON);
+	private static boolean isDebugOn = (boolean) Configs.getConfig(EConfigs.IS_DEBUG_ON);
 
 	/**
 	 * Saves the files got by the downloaders to disk. Only downloaders that
@@ -28,8 +27,7 @@ public final class FileSystemClient {
 	 * @param downloaderList
 	 *            The list of downloaders to have their backups saved.
 	 */
-	public static void saveToFileSystem(
-			final List<BaseDownloader> downloaderList) {
+	public static void saveToFileSystem(final List<BaseDownloader> downloaderList) {
 
 		for (BaseDownloader downloader : downloaderList) {
 			if (downloader.isBackupOK()) {
@@ -46,15 +44,16 @@ public final class FileSystemClient {
 	 *            The downloader that we will get the backup file from.
 	 */
 	private static void saveDataToFile(final BaseDownloader downloader) {
-		String directory = (String) Configs
-				.getConfig(EConfigs.ROOT_DIRECTORY);
+		String directory = Configs.getConfig(EConfigs.ROOT_DIRECTORY).toString();
+		if(!directory.endsWith(File.separator)){
+			directory += File.separator;
+		}
 		directory += downloader.getRouter().getSiteName();
 		try {
 			new File(directory).mkdirs();
 		} catch (Exception e) {
 			if (!isDebugOn) {
-				System.out.println("Error creating backup directory. "
-						+ "Activate debug for more info");
+				System.out.println("Error creating backup directory. " + "Activate debug for more info");
 			} else {
 				e.printStackTrace();
 			}
@@ -62,16 +61,14 @@ public final class FileSystemClient {
 
 		FileOutputStream out;
 		try {
-			out = new FileOutputStream(directory + "\\"
-					+ downloader.getBackupFileName());
+			out = new FileOutputStream(directory + File.separator + downloader.getBackupFileName());
 			out.write(downloader.getDownloadedBackup());
 			out.flush();
 			out.close();
 			cleanOldBackups(directory);
 		} catch (IOException e) {
 			if (!isDebugOn) {
-				System.out.println("Error saving files. "
-						+ "Activate debug for more info");
+				System.out.println("Error saving files. " + "Activate debug for more info");
 			} else {
 				e.printStackTrace();
 			}
@@ -88,8 +85,7 @@ public final class FileSystemClient {
 	private static void cleanOldBackups(final String directory) {
 
 		File dir = new File(directory);
-		LocalDateTime minusDate = LocalDateTime.now().minusDays(
-				(int) Configs.getConfig(EConfigs.DAYS_TO_KEEP));
+		LocalDateTime minusDate = LocalDateTime.now().minusDays((int) Configs.getConfig(EConfigs.DAYS_TO_KEEP));
 		ZonedDateTime zdt = minusDate.atZone(ZoneId.systemDefault());
 		// We use a file Filter to weed out the files or directories that we
 		// don't care about.
@@ -100,8 +96,7 @@ public final class FileSystemClient {
 				if (file.isFile()) {
 					String path = file.getAbsolutePath().toLowerCase();
 					if (path.endsWith(".cfg")) {
-						if (file.lastModified() < zdt.toInstant()
-								.toEpochMilli()) {
+						if (file.lastModified() < zdt.toInstant().toEpochMilli()) {
 							return true;
 						}
 					}

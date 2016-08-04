@@ -66,15 +66,20 @@ public final class Configs {
 		File rootDirFile = null;
 		String rootDir = props.getProperty(EConfigs.ROOT_DIRECTORY.getKey());
 		try {
-			rootDirFile = new File(rootDir);
+			rootDirFile = new File(rootDir);			
 			if (!rootDirFile.canWrite()) {
-				throw new IOException();
+				rootDirFile.mkdir();
+				if (!rootDirFile.canWrite()) {
+					throw new IOException();				
+				}				
 			}
+			
 		} catch (NullPointerException e) {
 			System.out.println("Root directory was not specified");
 			System.exit(1);
 		} catch (IOException e) {
-			System.out.println("Can't write to the specified path");
+			System.out.println("Can't write to the specified path " + rootDir);
+			e.printStackTrace();
 			System.exit(1);
 		}
 		// saves the config the the map
