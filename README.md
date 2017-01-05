@@ -52,4 +52,10 @@ The tool simply recreates the routines that a human would use to make a configur
 3. Build and test!
 Note: Various routers use the same method to autenticate and download firmwares. Sometimes it's needed to only copy a routers code to a new router class and edit the FILE_DOWNLOAD_STRING to make it work (don't forget to add the objects to ERouterModels!).
 
+### TODO
+1. Create both the configuration files and the csv file in the first run;
+2. Add SSL validation;
+3. Create a local GUI or something web based. This will problably require some major overhaul in the read router list routines if a DB is used;
+4. Add a way to send the backups by e-mail (the files are usually 10Kb each).
+
 Enjoy!
